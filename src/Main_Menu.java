@@ -1,0 +1,64 @@
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class Main_Menu extends Frame {
+    public Main_Menu(){
+        setTitle("");
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Button 1 - Top left
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(110, 50, 0, 30); // Top padding to push down, right padding for space between buttons
+        Button button1 = new Button("button 1");
+        button1.setPreferredSize(new Dimension(100, 50));
+        add(button1, gbc);
+
+        // Button 2 - Top right
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(110, 30, 0, 50); // Top padding to push down, left padding for space between buttons
+        Button button2 = new Button("button 2");
+        button2.setPreferredSize(new Dimension(100, 50));
+        add(button2, gbc);
+
+        // Button 3 - Bottom left
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(30, 50, 0, 30); // Top padding for space between rows, right padding for space between buttons
+        Button button3 = new Button("button 3");
+        button3.setPreferredSize(new Dimension(100, 50));
+        add(button3, gbc);
+
+        // Button 4 - Bottom right
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(30, 30, 0, 50); // Top padding for space between rows, left padding for space between buttons
+        Button button4 = new Button("button 4");
+        button4.setPreferredSize(new Dimension(100, 50));
+        add(button4, gbc);
+
+        setSize(400, 600);
+
+        centerWindow();
+
+        setVisible(true);
+
+        addWindowListener (new WindowAdapter() {
+            public void windowClosing (WindowEvent e) {
+                dispose();
+            }
+        });
+    }
+
+    private void centerWindow() {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+        int x = (screenSize.width - getWidth()) / 2;
+        int y = (screenSize.height - getHeight()) / 2;
+        setLocation(x, y);
+    }
+}
