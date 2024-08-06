@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -9,35 +11,42 @@ public class Main_Menu extends Frame {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Button 1 - Top left
+        //Play button
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(110, 50, 0, 30); // Top padding to push down, right padding for space between buttons
-        Button button1 = new Button("button 1");
+        Button button1 = new Button("Play");
         button1.setPreferredSize(new Dimension(100, 50));
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Game_Screen();
+                dispose();
+            }
+        });
         add(button1, gbc);
 
-        // Button 2 - Top right
+        //configuration button
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(110, 30, 0, 50); // Top padding to push down, left padding for space between buttons
-        Button button2 = new Button("button 2");
+        Button button2 = new Button("Configuration");
         button2.setPreferredSize(new Dimension(100, 50));
         add(button2, gbc);
 
-        // Button 3 - Bottom left
+        //High Scores button
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(30, 50, 0, 30); // Top padding for space between rows, right padding for space between buttons
-        Button button3 = new Button("button 3");
+        Button button3 = new Button("High Scores");
         button3.setPreferredSize(new Dimension(100, 50));
         add(button3, gbc);
 
-        // Button 4 - Bottom right
+        //Exit button
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.insets = new Insets(30, 30, 0, 50); // Top padding for space between rows, left padding for space between buttons
-        Button button4 = new Button("button 4");
+        Button button4 = new Button("Exit");
         button4.setPreferredSize(new Dimension(100, 50));
         add(button4, gbc);
 
