@@ -29,6 +29,7 @@ public class Game_Screen extends JFrame {
             g.drawRect(260, 20, 90, 90);
             g.drawRect(260, 110, 105, 45);
             g.drawRect(260, 155, 105, 45);
+            //test
         }
     }
     private void centerWindow() {
