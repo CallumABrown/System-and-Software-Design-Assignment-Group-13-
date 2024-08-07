@@ -14,7 +14,7 @@ public class Main_Menu extends Frame {
         //Play button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(110, 50, 0, 30); // Top padding to push down, right padding for space between buttons
+        gbc.insets = new Insets(110, 50, 0, 30);
         Button button1 = new Button("Play");
         button1.setPreferredSize(new Dimension(100, 50));
         button1.addActionListener(new ActionListener() {
@@ -29,7 +29,7 @@ public class Main_Menu extends Frame {
         //configuration button
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.insets = new Insets(110, 30, 0, 50); // Top padding to push down, left padding for space between buttons
+        gbc.insets = new Insets(110, 30, 0, 50);
         Button button2 = new Button("Configuration");
         button2.setPreferredSize(new Dimension(100, 50));
         add(button2, gbc);
@@ -37,7 +37,7 @@ public class Main_Menu extends Frame {
         //High Scores button
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(30, 50, 0, 30); // Top padding for space between rows, right padding for space between buttons
+        gbc.insets = new Insets(30, 50, 0, 30);
         Button button3 = new Button("High Scores");
         button3.setPreferredSize(new Dimension(100, 50));
         add(button3, gbc);
@@ -45,7 +45,7 @@ public class Main_Menu extends Frame {
         //Exit button
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.insets = new Insets(30, 30, 0, 50); // Top padding for space between rows, left padding for space between buttons
+        gbc.insets = new Insets(30, 30, 0, 50);
         Button button4 = new Button("Exit");
         button4.setPreferredSize(new Dimension(100, 50));
         button4.addActionListener(new ActionListener() {

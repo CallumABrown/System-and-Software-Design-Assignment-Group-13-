@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -7,6 +9,23 @@ public class Game_Screen extends JFrame {
     public Game_Screen(){
 
         setContentPane(new Game_Area());
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.ipadx = 57;
+        gbc.ipady = 10;
+
+        gbc.insets = new Insets(494, 271, 0, 30);
+        Button return_button = new Button("Return");
+        return_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Main_Menu();
+                dispose();
+            }
+        });
+
+        add(return_button, gbc);
 
         setSize(400, 600);
 
@@ -29,7 +48,6 @@ public class Game_Screen extends JFrame {
             g.drawRect(260, 20, 90, 90);
             g.drawRect(260, 110, 105, 45);
             g.drawRect(260, 155, 105, 45);
-            //test
         }
     }
     private void centerWindow() {
