@@ -48,6 +48,12 @@ public class Main_Menu extends Frame {
         gbc.insets = new Insets(30, 30, 0, 50); // Top padding for space between rows, left padding for space between buttons
         Button button4 = new Button("Exit");
         button4.setPreferredSize(new Dimension(100, 50));
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         add(button4, gbc);
 
         setSize(400, 600);
