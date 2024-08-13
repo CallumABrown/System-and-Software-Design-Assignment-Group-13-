@@ -32,6 +32,13 @@ public class Main_Menu extends Frame {
         gbc.insets = new Insets(110, 30, 0, 50);
         Button button2 = new Button("Configuration");
         button2.setPreferredSize(new Dimension(100, 50));
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Options_Menu();
+                dispose();
+            }
+        });
         add(button2, gbc);
 
         //High Scores button
