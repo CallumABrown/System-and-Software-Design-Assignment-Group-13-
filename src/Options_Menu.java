@@ -18,7 +18,6 @@ public class Options_Menu extends JFrame{
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 50, 0, 30);
         JSlider slider1 = new JSlider(5, 15, 10);
-        //slider1.setPreferredSize(new Dimension(100, 50));
         slider1.setMajorTickSpacing(1);
         slider1.setMinorTickSpacing(1);
         slider1.setPaintTrack(true);
@@ -43,7 +42,6 @@ public class Options_Menu extends JFrame{
         gbc.gridy = 3;
         gbc.insets = new Insets(20, 50, 0, 30);
         JSlider slider2 = new JSlider(15, 30, 20);
-        //slider1.setPreferredSize(new Dimension(100, 50));
         slider2.setMajorTickSpacing(1);
         slider2.setMinorTickSpacing(1);
         slider2.setPaintTrack(true);
@@ -68,7 +66,6 @@ public class Options_Menu extends JFrame{
         gbc.gridy = 5;
         gbc.insets = new Insets(20, 50, 0, 30);
         JSlider slider3 = new JSlider(15, 30, 20);
-        //slider1.setPreferredSize(new Dimension(100, 50));
         slider3.setMajorTickSpacing(1);
         slider3.setMinorTickSpacing(1);
         slider3.setPaintTrack(true);

@@ -47,6 +47,13 @@ public class Main_Menu extends Frame {
         gbc.insets = new Insets(30, 50, 0, 30);
         Button button3 = new Button("High Scores");
         button3.setPreferredSize(new Dimension(100, 50));
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new High_Score_Menu();
+                dispose();
+            }
+        });
         add(button3, gbc);
 
         //Exit button
