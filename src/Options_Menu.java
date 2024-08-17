@@ -16,7 +16,10 @@ public class Options_Menu extends JFrame{
 
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.gridwidth = 4;
         gbc.insets = new Insets(20, 50, 0, 30);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         JSlider slider1 = new JSlider(5, 15, 10);
         slider1.setMajorTickSpacing(1);
         slider1.setMinorTickSpacing(1);
@@ -40,7 +43,10 @@ public class Options_Menu extends JFrame{
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        gbc.gridwidth = 4;
         gbc.insets = new Insets(20, 50, 0, 30);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         JSlider slider2 = new JSlider(15, 30, 20);
         slider2.setMajorTickSpacing(1);
         slider2.setMinorTickSpacing(1);
@@ -64,7 +70,10 @@ public class Options_Menu extends JFrame{
 
         gbc.gridx = 0;
         gbc.gridy = 5;
+        gbc.gridwidth = 4;
         gbc.insets = new Insets(20, 50, 0, 30);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         JSlider slider3 = new JSlider(15, 30, 20);
         slider3.setMajorTickSpacing(1);
         slider3.setMinorTickSpacing(1);
@@ -86,60 +95,49 @@ public class Options_Menu extends JFrame{
             }
         });
 
-        gbc.gridx = 2;
-        gbc.gridy = 6;
-        gbc.insets = new Insets(20, 50, 0, 30);
-        JCheckBox checkBox1 = new JCheckBox();
-        add(checkBox1, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        gbc.insets = new Insets(20, 50, 0, 30);
+        gbc.gridx = 4;
+        gbc.gridy = 4;
         JLabel label4 = new JLabel("Extended Mode (On/Off): ");
         add(label4, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 1;
-        gbc.insets = new Insets(20, 50, 0, 30);
-        JCheckBox checkBox2 = new JCheckBox();
-        add(checkBox2, gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label5 = new JLabel("Music (On/Off): ");
         add(label5, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 2;
-        gbc.insets = new Insets(20, 50, 0, 30);
-        JCheckBox checkBox3 = new JCheckBox();
-        add(checkBox3, gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 2;
-        gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label6 = new JLabel("Sound effects (On/Off): ");
         add(label6, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 3;
-        gbc.insets = new Insets(20, 50, 0, 30);
-        JCheckBox checkBox4 = new JCheckBox();
-        add(checkBox4, gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 3;
-        gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label7 = new JLabel("AI play (On/Off): ");
         add(label7, gbc);
 
-        gbc.gridx = 1;
+        gbc.insets = new Insets(25, 230, 0, 0);
+        gbc.gridx = 5;
+        gbc.gridy = 1;
+        JCheckBox checkBox1 = new JCheckBox();
+        add(checkBox1, gbc);
+
+        gbc.gridy = 2;
+        JCheckBox checkBox2 = new JCheckBox();
+        add(checkBox2, gbc);
+
+        gbc.gridy = 3;
+        JCheckBox checkBox3 = new JCheckBox();
+        add(checkBox3, gbc);
+
+        gbc.gridy = 4;
+        JCheckBox checkBox4 = new JCheckBox();
+        add(checkBox4, gbc);
+
+
+        gbc.gridx = 3;
         gbc.gridy = 7;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        gbc.insets = new Insets(20, 50, 0, 30);
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(50, 0, 0, 0);
         Button return_button = new Button("Return");
         return_button.addActionListener(new ActionListener() {
             @Override

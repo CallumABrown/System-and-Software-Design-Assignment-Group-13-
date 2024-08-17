@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -43,6 +45,22 @@ public class High_Score_Menu extends Frame {
             Label score = new Label(scores.get(i));
             add(score, gbc);
         }
+
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        Button return_button = new Button("Return");
+        return_button.setPreferredSize(new Dimension(200, 20));
+        return_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Main_Menu();
+                dispose();
+            }
+        });
+        add(return_button, gbc);
 
         setSize(400, 600);
 
