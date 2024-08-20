@@ -7,6 +7,12 @@ import java.awt.event.KeyListener;
 import java.util.Random;
 
 public class Game_Area extends JPanel implements KeyListener {
+    public static int GAME_STATE_PLAY = 0;
+    public static int GAME_STATE_PAUSE = 1;
+    public static int GAME_STATE_OVER = 2;
+
+    private int state = GAME_STATE_PLAY;
+
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
@@ -82,12 +88,28 @@ public class Game_Area extends JPanel implements KeyListener {
     }
 
     private void update() {
-        currentShape.update();
+        if (state == GAME_STATE_PLAY) {
+            currentShape.update();
+        }
     }
 
     public void setCurrentShape() {
         currentShape = shapes[random.nextInt(shapes.length)];
         currentShape.reset();
+        checkGameOver();
+    }
+
+    private void checkGameOver() {
+        int[][] coordinates = currentShape.getCoordinates();
+        for (int row = 0; row < coordinates.length; row++) {
+            for (int col = 0; col < coordinates[0].length; col++) {
+                if (coordinates[row][col] != 0) {
+                    if (board[row + currentShape.getY()][col + currentShape.getX()] != null) {
+                        state = GAME_STATE_OVER;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -116,6 +138,16 @@ public class Game_Area extends JPanel implements KeyListener {
         for (int col = 0; col < BOARD_WIDTH + 1; col++) {
             g.drawLine(col * BLOCK_SIZE, 0, col * BLOCK_SIZE, BLOCK_SIZE * BOARD_HEIGHT);
         }
+
+        if (state == GAME_STATE_PAUSE) {
+            g.setColor(Color.white);
+            g.drawString("GAME PAUSED", 325, 200);
+            g.drawString("PRESS P TO PLAY", 325, 250);
+        }
+        if (state == GAME_STATE_OVER) {
+            g.setColor(Color.white);
+            g.drawString("GAME OVER", 325, 200);
+        }
     }
 
     public Color[][] getBoard() {
@@ -137,6 +169,10 @@ public class Game_Area extends JPanel implements KeyListener {
             currentShape.moveLeft();
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             currentShape.rotateShape();
+        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PLAY) {
+            state = GAME_STATE_PAUSE;
+        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PAUSE) {
+            state = GAME_STATE_PLAY;
         }
     }
 

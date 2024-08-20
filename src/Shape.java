@@ -174,4 +174,16 @@ public class Shape {
     public void moveLeft() {
         deltaX -= 1;
     }
+
+    public int[][] getCoordinates() {
+        return coordinates;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
