@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class Game_Area extends JPanel implements KeyListener {
+public class Game_Area extends JPanel implements KeyListener, ActionListener {
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
@@ -21,6 +21,10 @@ public class Game_Area extends JPanel implements KeyListener {
     private Color[] colors = {Color.decode("#ed1c24"), Color.decode("#ff7f27"), Color.decode("#fff200"),
             Color.decode("#22b14c"), Color.decode("#00a2e8"), Color.decode("#a349a4"), Color.decode("#3f48cc")};
 
+    int level = 1;
+    int score = 0;
+    public static boolean pausePressed;
+
     private int[][] shapeParameters = {
             {1, 1, 1},
             {0, 1, 0},
@@ -30,6 +34,8 @@ public class Game_Area extends JPanel implements KeyListener {
     private Shape currentShape;
 
     public Game_Area() {
+        setLayout(null);
+
         random = new Random();
 
         shapes[0] = new Shape(new int[][]{
@@ -79,10 +85,72 @@ public class Game_Area extends JPanel implements KeyListener {
             }
         });
         looper.start();
+
+        JButton returnButton = new JButton("Return");
+        returnButton.setPreferredSize(new Dimension(100, 30));
+        returnButton.setBounds(getWidth() - 120, getHeight() - 40, 100, 30);
+
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(pausePressed) {
+                    int response = JOptionPane.showConfirmDialog(
+                            Game_Area.this,
+                            "Are you sure you want to return to the main menu?",
+                            "Confirm Return",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+                    if (response == JOptionPane.YES_OPTION) {
+                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
+                        pausePressed = false;
+                        topFrame.dispose();
+                        new Main_Menu();
+                    } else {
+                        requestFocusInWindow();
+                    }
+                } else {
+                    pausePressed = true;
+                    int response = JOptionPane.showConfirmDialog(
+                            Game_Area.this,
+                            "Are you sure you want to return to the main menu?",
+                            "Confirm Return",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+                    if (response == JOptionPane.YES_OPTION) {
+                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
+                        pausePressed = false;
+                        topFrame.dispose();
+                        new Main_Menu();
+                    } else {
+                        requestFocusInWindow();
+                        pausePressed = false;
+                    }
+                }
+            }
+        });
+
+        add(returnButton);
+
+        setFocusable(true);
+        addKeyListener(this);
+    }
+
+    @Override
+    public void doLayout() {
+        super.doLayout();
+        // Adjust button position on layout
+        JButton returnButton = (JButton) getComponent(0);
+        if (returnButton != null) {
+            returnButton.setBounds(getWidth() - 120, getHeight() - 40, 100, 30);
+        }
     }
 
     private void update() {
-        currentShape.update();
+        if(!pausePressed) {
+            currentShape.update();
+        }
     }
 
     public void setCurrentShape() {
@@ -116,6 +184,35 @@ public class Game_Area extends JPanel implements KeyListener {
         for (int col = 0; col < BOARD_WIDTH + 1; col++) {
             g.drawLine(col * BLOCK_SIZE, 0, col * BLOCK_SIZE, BLOCK_SIZE * BOARD_HEIGHT);
         }
+
+        // Draw score window
+
+
+        int left_x = (Game_Screen.WIDTH/2);
+        int right_x = left_x + WIDTH;
+        int x = right_x + 100;
+        int y = BOARD_HEIGHT;
+        g.drawRect(x,y, 100, 100);
+        x += 20;
+        y += 40;
+        g.drawString("Level: " + level, x, y); y+=30;
+        g.drawString("Score: " + score, x, y); y+=30;
+
+        // Draw next window
+        x-=20;
+        y+=50;
+        g.drawRect(x,y, 100, 100);
+        g.drawString("NEXT", x+20,y+30);
+
+        // Draw paused
+        g.setColor(Color.yellow);
+        g.setFont(g.getFont().deriveFont(50f));
+        if(pausePressed) {
+            x = (Game_Screen.WIDTH/2)-100;
+            y = (Game_Screen.HEIGHT/2);
+            g.drawString("PAUSED", x, y);
+        }
+
     }
 
     public Color[][] getBoard() {
@@ -137,6 +234,12 @@ public class Game_Area extends JPanel implements KeyListener {
             currentShape.moveLeft();
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             currentShape.rotateShape();
+        } else if (e.getKeyCode() == KeyEvent.VK_P) {
+            if(pausePressed) {
+                pausePressed = false;
+            } else {
+                pausePressed = true;
+            }
         }
     }
 
@@ -145,5 +248,13 @@ public class Game_Area extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             currentShape.speedDown();
         }
+    }
+
+
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }

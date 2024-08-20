@@ -14,6 +14,10 @@ public class Shape {
     private Game_Area board;
     private Color color;
 
+    int lines;
+    public int level;
+    public int score;
+
     public Shape(int[][] coordinates, Game_Area board, Color color) {
         this.coordinates = coordinates;
         this.board = board;
@@ -101,6 +105,17 @@ public class Shape {
             }
             if (count < board.getBoard()[0].length) {
                 bottomLine--;
+                lines++;
+
+                if(lines % 10 == 0 && delayTimeForMovement > 1) {
+                    level++;
+                    if(delayTimeForMovement > 10) {
+                        delayTimeForMovement -= 10;
+                    }
+                    else {
+                        delayTimeForMovement -= 1;
+                    }
+                }
             }
         }
     }
