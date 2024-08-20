@@ -6,7 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class Game_Area extends JPanel implements KeyListener, ActionListener {
+public class Game_Area extends JPanel implements KeyListener {
+    public static int GAME_STATE_PLAY = 0;
+    public static int GAME_STATE_PAUSE = 1;
+    public static int GAME_STATE_OVER = 2;
+
+    private int state = GAME_STATE_PLAY;
+
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
@@ -93,7 +99,7 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(pausePressed) {
+                if(state == GAME_STATE_PAUSE) {
                     int response = JOptionPane.showConfirmDialog(
                             Game_Area.this,
                             "Are you sure you want to return to the main menu?",
@@ -103,14 +109,14 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        pausePressed = false;
+                        state = GAME_STATE_PLAY;
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();
                     }
                 } else {
-                    pausePressed = true;
+                    state = GAME_STATE_PAUSE;
                     int response = JOptionPane.showConfirmDialog(
                             Game_Area.this,
                             "Are you sure you want to return to the main menu?",
@@ -120,12 +126,12 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        pausePressed = false;
+                        state = GAME_STATE_PLAY;
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();
-                        pausePressed = false;
+                        state = GAME_STATE_PLAY;
                     }
                 }
             }
@@ -148,7 +154,7 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
     }
 
     private void update() {
-        if(!pausePressed) {
+        if (state == GAME_STATE_PLAY) {
             currentShape.update();
         }
     }
@@ -156,6 +162,20 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
     public void setCurrentShape() {
         currentShape = shapes[random.nextInt(shapes.length)];
         currentShape.reset();
+        checkGameOver();
+    }
+
+    private void checkGameOver() {
+        int[][] coordinates = currentShape.getCoordinates();
+        for (int row = 0; row < coordinates.length; row++) {
+            for (int col = 0; col < coordinates[0].length; col++) {
+                if (coordinates[row][col] != 0) {
+                    if (board[row + currentShape.getY()][col + currentShape.getX()] != null) {
+                        state = GAME_STATE_OVER;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -185,6 +205,16 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
             g.drawLine(col * BLOCK_SIZE, 0, col * BLOCK_SIZE, BLOCK_SIZE * BOARD_HEIGHT);
         }
 
+        if (state == GAME_STATE_PAUSE) {
+            g.setColor(Color.white);
+            g.drawString("GAME PAUSED", 325, 200);
+            g.drawString("PRESS P TO PLAY", 325, 250);
+        }
+        if (state == GAME_STATE_OVER) {
+            g.setColor(Color.white);
+            g.drawString("GAME OVER", 325, 200);
+        }
+
         // Draw score window
 
 
@@ -200,18 +230,9 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
 
         // Draw next window
         x-=20;
-        y+=50;
+        y+=200;
         g.drawRect(x,y, 100, 100);
         g.drawString("NEXT", x+20,y+30);
-
-        // Draw paused
-        g.setColor(Color.yellow);
-        g.setFont(g.getFont().deriveFont(50f));
-        if(pausePressed) {
-            x = (Game_Screen.WIDTH/2)-100;
-            y = (Game_Screen.HEIGHT/2);
-            g.drawString("PAUSED", x, y);
-        }
 
     }
 
@@ -234,12 +255,10 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
             currentShape.moveLeft();
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             currentShape.rotateShape();
-        } else if (e.getKeyCode() == KeyEvent.VK_P) {
-            if(pausePressed) {
-                pausePressed = false;
-            } else {
-                pausePressed = true;
-            }
+        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PLAY) {
+            state = GAME_STATE_PAUSE;
+        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PAUSE) {
+            state = GAME_STATE_PLAY;
         }
     }
 
@@ -248,13 +267,5 @@ public class Game_Area extends JPanel implements KeyListener, ActionListener {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             currentShape.speedDown();
         }
-    }
-
-
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 }
