@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -5,20 +6,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-public class High_Score_Menu extends Frame {
-    public High_Score_Menu(){
 
-        setTitle("");
+public class High_Score_Menu extends JFrame {
+    public High_Score_Menu() {
+        setTitle("High Score Screen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
+
+        Panel mainPanel = new Panel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         ArrayList<String> names = new ArrayList<String>();
-        for (int x = 0; x < 10; x++){
+        for (int x = 0; x < 10; x++) {
             names.add(String.valueOf(x + 10000));
         }
         ArrayList<String> scores = new ArrayList<String>();
-        for (int x = 10; x < 20; x++){
+        for (int x = 10; x < 20; x++) {
             scores.add(String.valueOf(x));
         }
 
@@ -28,22 +32,22 @@ public class High_Score_Menu extends Frame {
         gbc.insets = new Insets(10, 0, 20, 0); // Add some padding around the label
         gbc.anchor = GridBagConstraints.CENTER;
         Label label_1 = new Label("High Scores:");
-        add(label_1, gbc);
+        mainPanel.add(label_1, gbc);
 
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             gbc.gridx = 0;
             gbc.gridy = 1 + i;
             gbc.anchor = GridBagConstraints.WEST;
             Label name = new Label(names.get(i));
-            add(name, gbc);
+            mainPanel.add(name, gbc);
 
             gbc.gridx = 2;
             gbc.anchor = GridBagConstraints.EAST;
             Label score = new Label(scores.get(i));
-            add(score, gbc);
+            mainPanel.add(score, gbc);
         }
 
         gbc.gridx = 0;
@@ -60,16 +64,23 @@ public class High_Score_Menu extends Frame {
                 dispose();
             }
         });
-        add(return_button, gbc);
+        mainPanel.add(return_button, gbc);
+
+        add(mainPanel, BorderLayout.CENTER);
+
+        Panel footer = new Panel();
+        footer.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label footerLabel = new Label("Authors: Adam Filipczuk, Callum Brown, Gauruv Grover, Steve Drewery");
+        footer.add(footerLabel);
+
+        add(footer, BorderLayout.SOUTH);
 
         setSize(400, 600);
-
         centerWindow();
-
         setVisible(true);
 
-        addWindowListener (new WindowAdapter() {
-            public void windowClosing (WindowEvent e) {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
                 dispose();
             }
         });

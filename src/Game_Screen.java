@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Game_Screen extends JFrame {
     public static final int WIDTH = 445, HEIGHT = 640;
@@ -6,16 +7,29 @@ public class Game_Screen extends JFrame {
     private JFrame window;
 
     public Game_Screen() {
-        window = new JFrame("Game Screen");
-        window.setSize(WIDTH, HEIGHT);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setLocationRelativeTo(null);
+        setTitle("Game Screen");
+        setSize(WIDTH, HEIGHT + 50);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setLocationRelativeTo(null);
+
+        setLayout(new BorderLayout());
 
         board = new Game_Area();
-        window.add(board);
-        window.addKeyListener(board);
-        window.setVisible(true);
+        add(board, BorderLayout.CENTER);
+
+        JPanel footer = new JPanel();
+        footer.setBackground(Color.BLACK);
+        footer.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JLabel footerLabel = new JLabel("Authors: Adam Filipczuk, Callum Brown, Gauruv Grover, Steve Drewery");
+        footerLabel.setForeground(Color.WHITE);
+        footer.add(footerLabel);
+
+        add(footer, BorderLayout.SOUTH);
+
+        setVisible(true);
+
+        addKeyListener(board);
 //        setLayout(new GridBagLayout());
 //        GridBagConstraints gbc = new GridBagConstraints();
 //

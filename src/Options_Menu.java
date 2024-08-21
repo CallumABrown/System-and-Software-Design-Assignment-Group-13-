@@ -9,9 +9,13 @@ import javax.swing.event.ChangeListener;
 
 public class Options_Menu extends JFrame{
     public Options_Menu(){
-        setTitle("");
+        setTitle("Options Screen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
+        Panel mainPanel = new Panel(new GridBagLayout());
+
+        mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 0;
@@ -26,13 +30,13 @@ public class Options_Menu extends JFrame{
         slider1.setPaintTrack(true);
         slider1.setPaintTicks(true);
         slider1.setPaintLabels(true);
-        add(slider1, gbc);
+        mainPanel.add(slider1, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label1 = new JLabel("Field Width (Number of cells): " + slider1.getValue());
-        add(label1, gbc);
+        mainPanel.add(label1, gbc);
 
         slider1.addChangeListener(new ChangeListener() {
             @Override
@@ -53,13 +57,13 @@ public class Options_Menu extends JFrame{
         slider2.setPaintTrack(true);
         slider2.setPaintTicks(true);
         slider2.setPaintLabels(true);
-        add(slider2, gbc);
+        mainPanel.add(slider2, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label2 = new JLabel("Field Height (Number of cells): " + slider2.getValue());
-        add(label2, gbc);
+        mainPanel.add(label2, gbc);
 
         slider2.addChangeListener(new ChangeListener() {
             @Override
@@ -80,13 +84,13 @@ public class Options_Menu extends JFrame{
         slider3.setPaintTrack(true);
         slider3.setPaintTicks(true);
         slider3.setPaintLabels(true);
-        add(slider3, gbc);
+        mainPanel.add(slider3, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.insets = new Insets(20, 50, 0, 30);
         JLabel label3 = new JLabel("Game Level: " + slider2.getValue());
-        add(label3, gbc);
+        mainPanel.add(label3, gbc);
 
         slider3.addChangeListener(new ChangeListener() {
             @Override
@@ -98,40 +102,40 @@ public class Options_Menu extends JFrame{
         gbc.gridx = 4;
         gbc.gridy = 4;
         JLabel label4 = new JLabel("Extended Mode (On/Off): ");
-        add(label4, gbc);
+        mainPanel.add(label4, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 1;
         JLabel label5 = new JLabel("Music (On/Off): ");
-        add(label5, gbc);
+        mainPanel.add(label5, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 2;
         JLabel label6 = new JLabel("Sound effects (On/Off): ");
-        add(label6, gbc);
+        mainPanel.add(label6, gbc);
 
         gbc.gridx = 4;
         gbc.gridy = 3;
         JLabel label7 = new JLabel("AI play (On/Off): ");
-        add(label7, gbc);
+        mainPanel.add(label7, gbc);
 
         gbc.insets = new Insets(25, 230, 0, 0);
         gbc.gridx = 5;
         gbc.gridy = 1;
         JCheckBox checkBox1 = new JCheckBox();
-        add(checkBox1, gbc);
+        mainPanel.add(checkBox1, gbc);
 
         gbc.gridy = 2;
         JCheckBox checkBox2 = new JCheckBox();
-        add(checkBox2, gbc);
+        mainPanel.add(checkBox2, gbc);
 
         gbc.gridy = 3;
         JCheckBox checkBox3 = new JCheckBox();
-        add(checkBox3, gbc);
+        mainPanel.add(checkBox3, gbc);
 
         gbc.gridy = 4;
         JCheckBox checkBox4 = new JCheckBox();
-        add(checkBox4, gbc);
+        mainPanel.add(checkBox4, gbc);
 
 
         gbc.gridx = 3;
@@ -146,7 +150,16 @@ public class Options_Menu extends JFrame{
                 dispose();
             }
         });
-        add(return_button, gbc);
+        mainPanel.add(return_button, gbc);
+
+        add(mainPanel, BorderLayout.CENTER);
+
+        Panel footer = new Panel();
+        footer.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label footerLabel = new Label("Authors: Adam Filipczuk, Callum Brown, Gauruv Grover, Steve Drewery");
+        footer.add(footerLabel);
+
+        add(footer, BorderLayout.SOUTH);
 
         setSize(800, 600);
 

@@ -1,15 +1,19 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Main_Menu extends Frame {
+public class Main_Menu extends JFrame {
     public Main_Menu(){
-        setTitle("");
-
-        setLayout(new GridBagLayout());
+        setTitle("Main Screen");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        Panel mainPanel = new Panel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
+        mainPanel.setLayout(new GridBagLayout());
 
         //Play button
         gbc.gridx = 0;
@@ -24,13 +28,13 @@ public class Main_Menu extends Frame {
                 dispose();
             }
         });
-        add(button1, gbc);
+        mainPanel.add(button1, gbc);
 
-        //configuration button
+        //option button
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(110, 30, 0, 50);
-        Button button2 = new Button("Configuration");
+        Button button2 = new Button("Options");
         button2.setPreferredSize(new Dimension(100, 50));
         button2.addActionListener(new ActionListener() {
             @Override
@@ -39,7 +43,7 @@ public class Main_Menu extends Frame {
                 dispose();
             }
         });
-        add(button2, gbc);
+        mainPanel.add(button2, gbc);
 
         //High Scores button
         gbc.gridx = 0;
@@ -54,7 +58,7 @@ public class Main_Menu extends Frame {
                 dispose();
             }
         });
-        add(button3, gbc);
+        mainPanel.add(button3, gbc);
 
         //Exit button
         gbc.gridx = 1;
@@ -68,7 +72,16 @@ public class Main_Menu extends Frame {
                 dispose();
             }
         });
-        add(button4, gbc);
+        mainPanel.add(button4, gbc);
+
+        add(mainPanel, BorderLayout.CENTER);
+
+        Panel footer = new Panel();
+        footer.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Label footerLabel = new Label("Authors: Adam Filipczuk, Callum Brown, Gauruv Grover, Steve Drewery");
+        footer.add(footerLabel);
+
+        add(footer, BorderLayout.SOUTH);
 
         setSize(400, 600);
 
