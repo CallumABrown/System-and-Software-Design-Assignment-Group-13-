@@ -197,7 +197,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
         // Draw the Board
         g.setColor(Color.WHITE);
-        for (int row = 0; row < BOARD_HEIGHT; row++) {
+        for (int row = 0; row <= BOARD_HEIGHT; row++) {
             g.drawLine(0, BLOCK_SIZE * row, BLOCK_SIZE * BOARD_WIDTH, BLOCK_SIZE * row);
         }
 
@@ -262,6 +262,13 @@ public class Game_Area extends JPanel implements KeyListener {
                 break;
             case KeyEvent.VK_RIGHT:
                 currentShape.moveRight();
+                break;
+            case KeyEvent.VK_P:
+                if (state == GAME_STATE_PLAY) {
+                    state = GAME_STATE_PAUSE;
+                } else if (state == GAME_STATE_PAUSE) {
+                    state = GAME_STATE_PLAY;
+                }
                 break;
         }
     }

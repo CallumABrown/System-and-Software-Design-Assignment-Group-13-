@@ -8,7 +8,7 @@ public class Game_Screen extends JFrame {
 
     public Game_Screen() {
         setTitle("Game Screen");
-        setSize(WIDTH, HEIGHT + 50);
+        setSize(WIDTH, HEIGHT + 25);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
