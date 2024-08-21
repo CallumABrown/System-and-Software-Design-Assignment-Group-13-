@@ -29,7 +29,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     int level = 1;
     int score = 0;
-    public static boolean pausePressed;
+    public boolean downPressed;
 
     private int[][] shapeParameters = {
             {1, 1, 1},
@@ -99,7 +99,7 @@ public class Game_Area extends JPanel implements KeyListener {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(state == GAME_STATE_PAUSE) {
+                if (state == GAME_STATE_PAUSE) {
                     int response = JOptionPane.showConfirmDialog(
                             Game_Area.this,
                             "Are you sure you want to return to the main menu?",
@@ -218,21 +218,23 @@ public class Game_Area extends JPanel implements KeyListener {
         // Draw score window
 
 
-        int left_x = (Game_Screen.WIDTH/2);
+        int left_x = (Game_Screen.WIDTH / 2);
         int right_x = left_x + WIDTH;
         int x = right_x + 100;
         int y = BOARD_HEIGHT;
-        g.drawRect(x,y, 100, 100);
+        g.drawRect(x, y, 100, 100);
         x += 20;
         y += 40;
-        g.drawString("Level: " + level, x, y); y+=30;
-        g.drawString("Score: " + score, x, y); y+=30;
+        g.drawString("Level: " + level, x, y);
+        y += 30;
+        g.drawString("Score: " + score, x, y);
+        y += 30;
 
         // Draw next window
-        x-=20;
-        y+=200;
-        g.drawRect(x,y, 100, 100);
-        g.drawString("NEXT", x+20,y+30);
+        x -= 20;
+        y += 200;
+        g.drawRect(x, y, 100, 100);
+        g.drawString("NEXT", x + 20, y + 30);
 
     }
 
@@ -247,25 +249,28 @@ public class Game_Area extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            currentShape.speedUp();
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            currentShape.moveRight();
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            currentShape.moveLeft();
-        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-            currentShape.rotateShape();
-        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PLAY) {
-            state = GAME_STATE_PAUSE;
-        } else if (e.getKeyCode() == KeyEvent.VK_P && state == GAME_STATE_PAUSE) {
-            state = GAME_STATE_PLAY;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                currentShape.rotateShape();
+                break;
+            case KeyEvent.VK_DOWN:
+                downPressed = true;
+//                currentShape.speedUp();
+                break;
+            case KeyEvent.VK_LEFT:
+                currentShape.moveLeft();
+                break;
+            case KeyEvent.VK_RIGHT:
+                currentShape.moveRight();
+                break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            currentShape.speedDown();
+            downPressed = false;
+//            currentShape.speedDown();
         }
     }
 }

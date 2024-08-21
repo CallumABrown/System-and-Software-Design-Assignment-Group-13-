@@ -70,7 +70,14 @@ public class Shape {
             }
         }
         deltaX = 0;
-
+        System.out.println("Current Time" + System.currentTimeMillis());
+        System.out.println("Begin Time" + beginTime);
+        System.out.println("Delay" + delayTimeForMovement);
+        if (board.downPressed) {
+            delayTimeForMovement = fast;
+        } else {
+            delayTimeForMovement = normal;
+        }
         if (System.currentTimeMillis() - beginTime > delayTimeForMovement) {
             //Vertical Movement
             if (!((y + 1 + coordinates.length) > Game_Area.BOARD_HEIGHT)) {
@@ -107,15 +114,14 @@ public class Shape {
                 bottomLine--;
                 lines++;
 
-                if(lines % 10 == 0 && delayTimeForMovement > 1) {
-                    level++;
-                    if(delayTimeForMovement > 10) {
-                        delayTimeForMovement -= 10;
-                    }
-                    else {
-                        delayTimeForMovement -= 1;
-                    }
-                }
+//                if (lines % 10 == 0 && delayTimeForMovement > 1) {
+//                    level++;
+//                    if (delayTimeForMovement > 10) {
+//                        delayTimeForMovement -= 10;
+//                    } else {
+//                        delayTimeForMovement -= 1;
+//                    }
+//                }
             }
         }
     }
