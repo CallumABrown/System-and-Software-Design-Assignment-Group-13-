@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 
 public class Main_Menu extends JFrame {
     public Main_Menu(){
-        setTitle("Main Screen");
+        setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 

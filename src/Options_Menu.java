@@ -9,7 +9,7 @@ import javax.swing.event.ChangeListener;
 
 public class Options_Menu extends JFrame{
     public Options_Menu(){
-        setTitle("Options Screen");
+        setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout(new BorderLayout());

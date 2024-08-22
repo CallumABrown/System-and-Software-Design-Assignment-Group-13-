@@ -7,7 +7,7 @@ public class Game_Screen extends JFrame {
     private JFrame window;
 
     public Game_Screen() {
-        setTitle("Game Screen");
+        setTitle("Tetris");
         setSize(WIDTH, HEIGHT + 25);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);

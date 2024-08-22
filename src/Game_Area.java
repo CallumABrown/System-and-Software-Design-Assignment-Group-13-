@@ -126,7 +126,7 @@ public class Game_Area extends JPanel implements KeyListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        state = GAME_STATE_PLAY;
+                        state = GAME_STATE_OVER;
                         topFrame.dispose();
                         new Main_Menu();
                     } else {

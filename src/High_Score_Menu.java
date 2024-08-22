@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class High_Score_Menu extends JFrame {
     public High_Score_Menu() {
-        setTitle("High Score Screen");
+        setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setLayout(new BorderLayout());
