@@ -10,14 +10,23 @@ public class Main_Menu extends JFrame {
         setTitle("Main Screen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        Panel mainPanel = new Panel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
 
-        mainPanel.setLayout(new GridBagLayout());
+        JPanel logoPanel = new JPanel(new BorderLayout());
+        ImageIcon logoIcon = new ImageIcon("resources/logo.png");
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(140, 0, 0, 0));
+        logoPanel.add(logoLabel, BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
         //Play button
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1;
         gbc.insets = new Insets(110, 50, 0, 30);
         Button button1 = new Button("Play");
         button1.setPreferredSize(new Dimension(100, 50));
@@ -69,7 +78,17 @@ public class Main_Menu extends JFrame {
         button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
+                int response = JOptionPane.showConfirmDialog(
+                        null,
+                        "Are you sure you want to close the program?",
+                        "Confirm",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (response == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
             }
         });
         mainPanel.add(button4, gbc);
@@ -82,6 +101,7 @@ public class Main_Menu extends JFrame {
         footer.add(footerLabel);
 
         add(footer, BorderLayout.SOUTH);
+        add(logoLabel, BorderLayout.NORTH);
 
         setSize(400, 600);
 

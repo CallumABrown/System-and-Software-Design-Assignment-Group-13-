@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class High_Score_Menu extends JFrame {
@@ -17,14 +18,9 @@ public class High_Score_Menu extends JFrame {
         Panel mainPanel = new Panel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        ArrayList<String> names = new ArrayList<String>();
-        for (int x = 0; x < 10; x++) {
-            names.add(String.valueOf(x + 10000));
-        }
-        ArrayList<String> scores = new ArrayList<String>();
-        for (int x = 10; x < 20; x++) {
-            scores.add(String.valueOf(x));
-        }
+        ArrayList<String> names = new ArrayList<String>(Arrays.asList("Alice", "Bob", "Charlie", "Phil", "Grace", "Mark", "William", "Billy", "Jessie", "Lona"));
+
+        ArrayList<String> scores = new ArrayList<String>(Arrays.asList("10450", "9865", "8735", "8550", "8005", "6500", "5005", "5002", "4875", "4405"));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
