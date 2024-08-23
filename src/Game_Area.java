@@ -131,7 +131,7 @@ public class Game_Area extends JPanel implements KeyListener {
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();
-                        state = GAME_STATE_PLAY;
+                        state = GAME_STATE_PAUSE;
                     }
                 }
             }
