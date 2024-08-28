@@ -8,6 +8,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class Options_Menu extends JFrame{
+    public static Integer window_width;
+    public static Integer window_height;
+    public static Integer game_level;
     public Options_Menu(){
         setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -24,7 +27,7 @@ public class Options_Menu extends JFrame{
         gbc.insets = new Insets(20, 50, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        JSlider slider1 = new JSlider(5, 15, 10);
+        JSlider slider1 = new JSlider(5, 15, window_width);
         slider1.setMajorTickSpacing(1);
         slider1.setMinorTickSpacing(1);
         slider1.setPaintTrack(true);
@@ -42,6 +45,7 @@ public class Options_Menu extends JFrame{
             @Override
             public void stateChanged(ChangeEvent e) {
                 label1.setText("Field Width (Number of cells): " + slider1.getValue());
+                window_width = slider1.getValue();
             }
         });
 
@@ -51,7 +55,7 @@ public class Options_Menu extends JFrame{
         gbc.insets = new Insets(20, 50, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        JSlider slider2 = new JSlider(15, 30, 20);
+        JSlider slider2 = new JSlider(15, 30, window_height);
         slider2.setMajorTickSpacing(1);
         slider2.setMinorTickSpacing(1);
         slider2.setPaintTrack(true);
@@ -69,6 +73,7 @@ public class Options_Menu extends JFrame{
             @Override
             public void stateChanged(ChangeEvent e) {
                 label2.setText("Field Height (Number of cells): " + slider2.getValue());
+                window_height = slider2.getValue();
             }
         });
 

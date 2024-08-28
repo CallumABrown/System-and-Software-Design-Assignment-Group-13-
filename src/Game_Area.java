@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import java.util.Random;
 
 public class Game_Area extends JPanel implements KeyListener {
+
     public static int GAME_STATE_PLAY = 0;
     public static int GAME_STATE_PAUSE = 1;
     public static int GAME_STATE_OVER = 2;
@@ -16,11 +17,11 @@ public class Game_Area extends JPanel implements KeyListener {
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
-    public static final int BOARD_WIDTH = 10;
-    public static final int BOARD_HEIGHT = 20;
+    public static int BOARD_WIDTH = Options_Menu.window_width;
+    public static int BOARD_HEIGHT = Options_Menu.window_height;
     public static final int BLOCK_SIZE = 30;
     private Timer looper;
-    private Color[][] board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
+    private Color[][] board;
 
     private Random random;
 
@@ -41,6 +42,11 @@ public class Game_Area extends JPanel implements KeyListener {
 
     public Game_Area() {
         setLayout(null);
+
+        BOARD_WIDTH = Options_Menu.window_width;
+        BOARD_HEIGHT = Options_Menu.window_height;
+
+        board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
 
         random = new Random();
 
@@ -111,6 +117,7 @@ public class Game_Area extends JPanel implements KeyListener {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_PLAY;
                         topFrame.dispose();
+                        board = null;
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();

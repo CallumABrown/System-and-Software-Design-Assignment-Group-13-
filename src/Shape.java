@@ -55,24 +55,25 @@ public class Shape {
         }
         // Check Horizontal Movement
         boolean moveX = true;
-        if (!(x + deltaX + coordinates[0].length > 10) && !(x + deltaX < 0)) {
+        if (!(x + deltaX + coordinates[0].length > Options_Menu.window_width) && !(x + deltaX < 0)) {
             for (int row = 0; row < coordinates.length; row++) {
                 for (int col = 0; col < coordinates[row].length; col++) {
                     if (coordinates[row][col] != 0) {
                         if (board.getBoard()[y + row][x + deltaX + col] != null) {
                             moveX = false;
+                            System.out.println("x:"+x);
+                            System.out.println("deltaX:"+deltaX);
+                            System.out.println("col:"+col);
                         }
                     }
                 }
             }
             if (moveX) {
                 x += deltaX;
+                System.out.println(x);
             }
         }
         deltaX = 0;
-        System.out.println("Current Time" + System.currentTimeMillis());
-        System.out.println("Begin Time" + beginTime);
-        System.out.println("Delay" + delayTimeForMovement);
         if (board.downPressed) {
             delayTimeForMovement = fast;
         } else {
