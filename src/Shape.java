@@ -2,7 +2,8 @@ import java.awt.*;
 
 public class Shape {
     private int x = 4, y = 0;
-    private int normal = 600;
+    private int level;
+    private int normal;
     private int fast = 50;
     private int delayTimeForMovement = normal;
     private long beginTime;
@@ -15,13 +16,14 @@ public class Shape {
     private Color color;
 
     int lines;
-    public int level;
     public int score;
 
     public Shape(int[][] coordinates, Game_Area board, Color color) {
         this.coordinates = coordinates;
         this.board = board;
         this.color = color;
+        this.level = board.level;
+        this.normal = 600 - ((level - 1) * 50);
     }
 
     public void setX(int x) {
