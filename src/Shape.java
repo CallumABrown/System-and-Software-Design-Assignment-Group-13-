@@ -1,7 +1,7 @@
 import java.awt.*;
 
 public class Shape {
-    private int x = 4, y = 0;
+    private int x = (Options_Menu.window_width / 2) - 1, y = 0;
     private int level;
     private int normal;
     private int fast = 50;
@@ -35,7 +35,7 @@ public class Shape {
     }
 
     public void reset() {
-        this.x = 4;
+        this.x = (Options_Menu.window_width / 2) - 1;
         this.y = 0;
         collision = false;
     }
@@ -63,9 +63,9 @@ public class Shape {
                     if (coordinates[row][col] != 0) {
                         if (board.getBoard()[y + row][x + deltaX + col] != null) {
                             moveX = false;
-                            System.out.println("x:"+x);
-                            System.out.println("deltaX:"+deltaX);
-                            System.out.println("col:"+col);
+                            System.out.println("x:" + x);
+                            System.out.println("deltaX:" + deltaX);
+                            System.out.println("col:" + col);
                         }
                     }
                 }
@@ -181,14 +181,6 @@ public class Shape {
                 }
             }
         }
-    }
-
-    public void speedUp() {
-        delayTimeForMovement = fast;
-    }
-
-    public void speedDown() {
-        delayTimeForMovement = normal;
     }
 
     public void moveRight() {
