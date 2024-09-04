@@ -11,6 +11,11 @@ public class Options_Menu extends JFrame{
     public static Integer window_width;
     public static Integer window_height;
     public static Integer game_level;
+    public static Boolean music;
+    public static Boolean sound_effects;
+    public static Boolean extend;
+    public static String player1_type;
+    public static String player2_type;
     public Options_Menu(){
         setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,43 +110,106 @@ public class Options_Menu extends JFrame{
         });
 
         gbc.gridx = 4;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         JLabel label4 = new JLabel("Extended Mode (On/Off): ");
         mainPanel.add(label4, gbc);
 
-        gbc.gridx = 4;
         gbc.gridy = 1;
         JLabel label5 = new JLabel("Music (On/Off): ");
         mainPanel.add(label5, gbc);
 
-        gbc.gridx = 4;
         gbc.gridy = 2;
         JLabel label6 = new JLabel("Sound effects (On/Off): ");
         mainPanel.add(label6, gbc);
 
-        gbc.gridx = 4;
-        gbc.gridy = 3;
-        JLabel label7 = new JLabel("AI play (On/Off): ");
+        gbc.gridy = 4;
+        JLabel label7 = new JLabel("Player One Type: ");
         mainPanel.add(label7, gbc);
+
+        gbc.gridy = 5;
+        JLabel label8= new JLabel("Player Two Type: ");
+        mainPanel.add(label8, gbc);
 
         gbc.insets = new Insets(25, 230, 0, 0);
         gbc.gridx = 5;
         gbc.gridy = 1;
         JCheckBox checkBox1 = new JCheckBox();
+        checkBox1.setSelected(music);
         mainPanel.add(checkBox1, gbc);
+
+        checkBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JCheckBox cb = (JCheckBox) event.getSource();
+                if (checkBox1.isSelected()) {
+                    music = true;
+                } else {
+                    music = false;
+                }
+            }
+        });
 
         gbc.gridy = 2;
         JCheckBox checkBox2 = new JCheckBox();
+        checkBox2.setSelected(sound_effects);
         mainPanel.add(checkBox2, gbc);
+
+        checkBox2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JCheckBox cb = (JCheckBox) event.getSource();
+                if (checkBox2.isSelected()) {
+                    sound_effects = true;
+                } else {
+                    sound_effects = false;
+                }
+            }
+        });
 
         gbc.gridy = 3;
         JCheckBox checkBox3 = new JCheckBox();
+        checkBox3.setSelected(extend);
         mainPanel.add(checkBox3, gbc);
 
+        String[] user_types = {"Human", "AI", "External"};
         gbc.gridy = 4;
-        JCheckBox checkBox4 = new JCheckBox();
-        mainPanel.add(checkBox4, gbc);
+        JComboBox list1 = new JComboBox(user_types);
+        list1.setSelectedItem(player1_type);
+        mainPanel.add(list1, gbc);
 
+        list1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player1_type = (String) list1.getSelectedItem();
+            }
+        });
+
+        gbc.gridy = 5;
+        JComboBox list2 = new JComboBox(user_types);
+        list2.setEnabled(extend);
+        list2.setSelectedItem(player2_type);
+        mainPanel.add(list2, gbc);
+
+        list2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player2_type = (String) list2.getSelectedItem();
+            }
+        });
+
+        checkBox3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JCheckBox cb = (JCheckBox) event.getSource();
+                if (checkBox3.isSelected()) {
+                    extend = true;
+                    list2.setEnabled(extend);
+                } else {
+                    extend = false;
+                    list2.setEnabled(extend);
+                }
+            }
+        });
 
         gbc.gridx = 3;
         gbc.gridy = 7;

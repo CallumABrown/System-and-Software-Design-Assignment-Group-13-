@@ -6,6 +6,11 @@ public class Main {
 
         Options_Menu.window_height = 20;
         Options_Menu.window_width = 10;
+        Options_Menu.music = true;
+        Options_Menu.sound_effects = true;
+        Options_Menu.extend = false;
+        Options_Menu.player1_type = "Human";
+        Options_Menu.player2_type = "Human";
         new Main_Menu();
     }
 }
