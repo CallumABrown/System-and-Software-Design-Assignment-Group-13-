@@ -187,6 +187,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     @Override
     protected void paintComponent(Graphics g) {
+        int TEXT_LOCATION = getWidth() - 150;
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -214,20 +215,17 @@ public class Game_Area extends JPanel implements KeyListener {
 
         if (state == GAME_STATE_PAUSE) {
             g.setColor(Color.white);
-            g.drawString("GAME PAUSED", 325, 200);
-            g.drawString("PRESS P TO PLAY", 325, 250);
+            g.drawString("GAME PAUSED", TEXT_LOCATION, 200);
+            g.drawString("PRESS P TO PLAY", TEXT_LOCATION, 250);
         }
         if (state == GAME_STATE_OVER) {
             g.setColor(Color.white);
-            g.drawString("GAME OVER", 325, 200);
+            g.drawString("GAME OVER", TEXT_LOCATION, 200);
         }
 
         // Draw score window
 
-
-        int left_x = (Game_Screen.WIDTH / 2);
-        int right_x = left_x + WIDTH;
-        int x = right_x + 100;
+        int x = TEXT_LOCATION;
         int y = BOARD_HEIGHT;
         g.drawRect(x, y, 100, 100);
         x += 20;
@@ -262,7 +260,6 @@ public class Game_Area extends JPanel implements KeyListener {
                 break;
             case KeyEvent.VK_DOWN:
                 downPressed = true;
-//                currentShape.speedUp();
                 break;
             case KeyEvent.VK_LEFT:
                 currentShape.moveLeft();
