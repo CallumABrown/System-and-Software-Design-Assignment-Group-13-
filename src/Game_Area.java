@@ -1,9 +1,12 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class Game_Area extends JPanel implements KeyListener {
@@ -32,6 +35,15 @@ public class Game_Area extends JPanel implements KeyListener {
     int score = 0;
     public boolean downPressed;
 
+    void Music() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        File background_music = new File("resources/8-bit-arcade.wav");
+        AudioInputStream audio_input = AudioSystem.getAudioInputStream(background_music);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audio_input);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
+    }
+
     private int[][] shapeParameters = {
             {1, 1, 1},
             {0, 1, 0},
@@ -42,6 +54,12 @@ public class Game_Area extends JPanel implements KeyListener {
 
     public Game_Area() {
         setLayout(null);
+
+        try {
+            Music();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
 
         BOARD_WIDTH = Options_Menu.window_width;
         BOARD_HEIGHT = Options_Menu.window_height;

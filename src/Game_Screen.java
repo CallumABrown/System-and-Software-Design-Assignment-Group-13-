@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+
 public class Game_Screen extends JFrame {
     public static int WIDTH, HEIGHT;
     private Game_Area board;
@@ -13,7 +14,6 @@ public class Game_Screen extends JFrame {
         if (WIDTH < 420) {
             WIDTH = 420;
         }
-
         setSize(WIDTH, HEIGHT + 25);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
