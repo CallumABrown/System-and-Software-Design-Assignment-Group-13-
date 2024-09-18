@@ -17,8 +17,6 @@ public class Game_Area extends JPanel implements KeyListener {
 
     private int state = GAME_STATE_PLAY;
 
-    private Clip clip;
-
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
@@ -40,7 +38,7 @@ public class Game_Area extends JPanel implements KeyListener {
     void Music() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         File background_music = new File("resources/8-bit-arcade.wav");
         AudioInputStream audio_input = AudioSystem.getAudioInputStream(background_music);
-        clip = AudioSystem.getClip();
+        Clip clip = AudioSystem.getClip();
         clip.open(audio_input);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.start();
@@ -294,14 +292,6 @@ public class Game_Area extends JPanel implements KeyListener {
                     state = GAME_STATE_PLAY;
                 }
                 break;
-            case KeyEvent.VK_M:
-                if(Options_Menu.music){
-                    clip.stop();
-                    Options_Menu.music = false;
-                }else {
-                    clip.start();
-                    Options_Menu.music = true;
-                }
         }
     }
 
