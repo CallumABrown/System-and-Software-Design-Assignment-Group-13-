@@ -1,18 +1,15 @@
-import com.google.gson.annotations.SerializedName;
-
 public class HighScoreClass {
-    @SerializedName("name")
     public String name;
-
-    @SerializedName("score")
     public int score;
 
+    /**
+     * Creates a new HighScore class instance which holds two values.
+     * 
+     * @param name  The name of the person who achieved the high score.
+     * @param score The high score that the person achieved.
+     */
     public HighScoreClass(String name, int score) {
         this.name = name;
         this.score = score;
-    }
-
-    // Default constructor needed for Gson
-    public HighScoreClass() {
     }
 }

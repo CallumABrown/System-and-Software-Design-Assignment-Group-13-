@@ -1,21 +1,20 @@
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+// import java.util.ArrayList;
+// import java.util.Arrays;
+import java.util.Scanner;
 
 public class High_Score_Menu extends JFrame {
-    private static final String HIGH_SCORE_FILE_PATH = "data/highscores.json";
-    private static final int HIGH_SCORES_COUNT = 10;
-    private List<HighScoreClass> highScoresLeaderboard;
+    private static final String HIGH_SCORE_FILE_PATH = "../data/highscores.dat";
+    private static final int HIGH_SCORES_COUNT = 5;
+    private HighScoreClass[] highScoresLeaderboard;
 
     public High_Score_Menu() {
         setTitle("High Scores");
@@ -26,6 +25,12 @@ public class High_Score_Menu extends JFrame {
 
         Panel mainPanel = new Panel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+
+        // ArrayList<String> names = new ArrayList<String>(Arrays.asList("Alice", "Bob",
+        // "Charlie", "Phil", "Grace", "Mark", "William", "Billy", "Jessie", "Lona"));
+
+        // ArrayList<String> scores = new ArrayList<String>(Arrays.asList("10450",
+        // "9865", "8735", "8550", "8005", "6500", "5005", "5002", "4875", "4405"));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -38,13 +43,37 @@ public class High_Score_Menu extends JFrame {
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 10, 5, 10);
 
-        // Display high scores
-        displayHighScores(mainPanel, gbc);
+        // for (int i = 0; i < 10; i++) {
+        // gbc.gridx = 0;
+        // gbc.gridy = 1 + i;
+        // gbc.anchor = GridBagConstraints.WEST;
+        // Label name = new Label(names.get(i));
+        // mainPanel.add(name, gbc);
+
+        // gbc.gridx = 2;
+        // gbc.anchor = GridBagConstraints.EAST;
+        // Label score = new Label(scores.get(i));
+        // mainPanel.add(score, gbc);
+        // }
+
+        for (int i = 0; i < highScoresLeaderboard.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = 1 + i;
+            gbc.anchor = GridBagConstraints.WEST;
+            Label name = new Label(highScoresLeaderboard[i].name);
+            mainPanel.add(name, gbc);
+
+            gbc.gridx = 2;
+            gbc.anchor = GridBagConstraints.EAST;
+            Label score = new Label(String.valueOf(highScoresLeaderboard[i].score));
+            mainPanel.add(score, gbc);
+        }
 
         gbc.gridx = 0;
-        gbc.gridy = highScoresLeaderboard.size() + 1;
+        gbc.gridy = 12;
         gbc.gridwidth = 3;
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 0, 0, 0);
         Button return_button = new Button("Return");
         return_button.setPreferredSize(new Dimension(200, 20));
         return_button.addActionListener(new ActionListener() {
@@ -54,19 +83,7 @@ public class High_Score_Menu extends JFrame {
                 dispose();
             }
         });
-
-        // Create reset button
-        Button reset_button = new Button("Reset High Scores");
-        reset_button.setPreferredSize(new Dimension(200, 20));
-        reset_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetHighScores();
-                displayHighScores(mainPanel, gbc); // Refresh display
-            }
-        });
-        gbc.gridy = highScoresLeaderboard.size() + 2; // Position below return button
-        mainPanel.add(reset_button, gbc);
+        mainPanel.add(return_button, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
 
@@ -86,103 +103,61 @@ public class High_Score_Menu extends JFrame {
                 dispose();
             }
         });
+
     }
 
     private void loadHighScores() {
-        highScoresLeaderboard = new ArrayList<>();
+        highScoresLeaderboard = new HighScoreClass[HIGH_SCORES_COUNT];
+        for (int i = 0; i < HIGH_SCORES_COUNT; i++) {
+            highScoresLeaderboard[i] = new HighScoreClass("", 0);
+        }
+
         File highScoreFile = new File(HIGH_SCORE_FILE_PATH);
 
         if (!highScoreFile.exists()) {
             System.out.println("High score file does not exist at: " + HIGH_SCORE_FILE_PATH);
-            createDefaultHighScores(); // Create default if file doesn't exist
-            return;
-        }
-
-        try (FileReader fileReader = new FileReader(highScoreFile)) {
-            Gson gson = new Gson();
-            java.lang.reflect.Type listType = new TypeToken<ArrayList<HighScoreClass>>() {}.getType();
-            highScoresLeaderboard = gson.fromJson(fileReader, listType);
-
-            // Ensure the list has the required number of scores
-            while (highScoresLeaderboard.size() < HIGH_SCORES_COUNT) {
-                highScoresLeaderboard.add(new HighScoreClass("No Record", 0));
+            // Optionally, initialize highScoresLeaderboard with default values or handle
+            // the case accordingly
+            for (int i = 0; i < HIGH_SCORES_COUNT; i++) {
+                highScoresLeaderboard[i] = new HighScoreClass("No Record", 0);
             }
-            highScoresLeaderboard.sort((hs1, hs2) -> Integer.compare(hs2.score, hs1.score));
-            saveHighScores();
+            return; // Exit the method if the file does not exist
+        }
+        try (Scanner fileReader = new Scanner(highScoreFile)) {
+            int totalLinesRead = 0;
+            while (fileReader.hasNextLine() && totalLinesRead < HIGH_SCORES_COUNT) {
+                String highScoreLine = fileReader.nextLine();
+
+                // Skip over empty lines and lines that are comments
+                if (highScoreLine.isEmpty() || highScoreLine.startsWith("--")) {
+                    continue;
+                }
+
+                String[] lineTokens = highScoreLine.split("\\|");
+                if (lineTokens.length >= 2) {
+                    highScoresLeaderboard[totalLinesRead] = new HighScoreClass(lineTokens[0],
+                            Integer.parseInt(lineTokens[1]));
+                    totalLinesRead++;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void createDefaultHighScores() {
-        highScoresLeaderboard = new ArrayList<>();
-        for (int i = 0; i < HIGH_SCORES_COUNT; i++) {
-            highScoresLeaderboard.add(new HighScoreClass("No Record", 0));
-        }
-        saveHighScores(); // Save the default scores to the file
     }
 
     private void saveHighScores() {
         try (FileWriter fileWriter = new FileWriter(new File(HIGH_SCORE_FILE_PATH))) {
-            Gson gson = new Gson();
-            gson.toJson(highScoresLeaderboard, fileWriter);
+            fileWriter.write("-- This file stores the high scores for the game.\n");
+            fileWriter
+                    .write("-- MODIFYING THIS FILE CAN RESULT IN DATA CORRUPTION / UNEXPECTED PROGRAM BEHAVIOUR.\n\n");
+
+            for (int i = 0; i < highScoresLeaderboard.length; i++) {
+                fileWriter.write(highScoresLeaderboard[i].name + "|" + highScoresLeaderboard[i].score
+                        + (i == highScoresLeaderboard.length - 1 ? "" : "\n"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void resetHighScores() {
-        createDefaultHighScores(); // Create a new default file
-        loadHighScores(); // Reload the scores from the file
-    }
-
-    private void displayHighScores(Panel mainPanel, GridBagConstraints gbc) {
-        // Clear previous high score labels before displaying
-        mainPanel.removeAll(); // Only clear for the new scores, re-add other components later
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-
-        for (HighScoreClass highScore : highScoresLeaderboard) {
-            gbc.anchor = GridBagConstraints.WEST;
-            mainPanel.add(new Label(highScore.name), gbc);
-            gbc.gridx = 2;
-            gbc.anchor = GridBagConstraints.EAST;
-            mainPanel.add(new Label(String.valueOf(highScore.score)), gbc);
-            gbc.gridx = 0;
-            gbc.gridy++;
-        }
-
-        // Re-add buttons and other components
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.gridwidth = 3;
-        gbc.anchor = GridBagConstraints.CENTER;
-
-        Button return_button = new Button("Return");
-        return_button.setPreferredSize(new Dimension(200, 20));
-        return_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Main_Menu();
-                dispose();
-            }
-        });
-        mainPanel.add(return_button, gbc);
-
-        gbc.gridy++;
-        Button reset_button = new Button("Reset High Scores");
-        reset_button.setPreferredSize(new Dimension(200, 20));
-        reset_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetHighScores();
-                displayHighScores(mainPanel, gbc);
-            }
-        });
-        mainPanel.add(reset_button, gbc);
-
-        mainPanel.revalidate(); // Refresh the layout
-        mainPanel.repaint(); // Repaint the panel
     }
 
     private void centerWindow() {
