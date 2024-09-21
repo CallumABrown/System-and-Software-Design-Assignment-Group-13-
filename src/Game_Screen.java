@@ -14,9 +14,6 @@ public class Game_Screen extends JFrame {
         if (WIDTH < 420) {
             WIDTH = 420;
         }
-        if (Options_Menu.extend){
-            WIDTH = WIDTH * 2;
-        }
         setSize(WIDTH, HEIGHT + 25);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);

@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Shape {
     private int x = (Options_Menu.window_width / 2) - 1, y = 0;
-    private int level;
+    //    private int level;
     private int normal;
     private int fast = 50;
     private int delayTimeForMovement = normal;
@@ -16,14 +16,13 @@ public class Shape {
     private Color color;
 
     int lines;
-    public int score;
 
     public Shape(int[][] coordinates, Game_Area board, Color color) {
         this.coordinates = coordinates;
         this.board = board;
         this.color = color;
-        this.level = board.level;
-        this.normal = 600 - ((level - 1) * 50);
+//        this.level = board.level;
+        this.normal = 600 - ((board.level - 1) * 50);
     }
 
     public void setX(int x) {
@@ -50,7 +49,8 @@ public class Shape {
                     }
                 }
             }
-            checkLine();
+            int linesCleared = checkLine();
+            updateScore(linesCleared);
             //Change Current Shape
             Game_Area.playSound("resources/place.wav");
             board.setCurrentShape();
@@ -64,22 +64,19 @@ public class Shape {
                     if (coordinates[row][col] != 0) {
                         if (board.getBoard()[y + row][x + deltaX + col] != null) {
                             moveX = false;
-                            System.out.println("x:" + x);
-                            System.out.println("deltaX:" + deltaX);
-                            System.out.println("col:" + col);
                         }
                     }
                 }
             }
             if (moveX) {
                 x += deltaX;
-                System.out.println(x);
             }
         }
         deltaX = 0;
         if (board.downPressed) {
             delayTimeForMovement = fast;
         } else {
+            normal = 600 - ((board.level - 1) * 50);
             delayTimeForMovement = normal;
         }
         if (System.currentTimeMillis() - beginTime > delayTimeForMovement) {
@@ -104,7 +101,30 @@ public class Shape {
         }
     }
 
-    private void checkLine() {
+    private void updateScore(int linesCleared) {
+        switch (linesCleared) {
+            case 1:
+                board.score = board.score + 100;
+                break;
+            case 2:
+                board.score = board.score + 300;
+                System.out.println("2 together");
+                break;
+            case 3:
+                board.score = board.score + 600;
+                System.out.println("3 together");
+                break;
+            case 4:
+                board.score = board.score + 1000;
+                System.out.println("4 together");
+                break;
+            default:
+                return;
+        }
+    }
+
+    private int checkLine() {
+        int linesCleared = 0;
         int bottomLine = board.getBoard().length - 1;
         for (int topLine = board.getBoard().length - 1; topLine > 0; topLine--) {
             int count = 0;
@@ -118,17 +138,24 @@ public class Shape {
                 bottomLine--;
                 lines++;
 
-//                if (lines % 10 == 0 && delayTimeForMovement > 1) {
-//                    level++;
+//                if (lines % Options_Menu.window_width == 0 && delayTimeForMovement > 1) {
 //                    if (delayTimeForMovement > 10) {
 //                        delayTimeForMovement -= 10;
 //                    } else {
 //                        delayTimeForMovement -= 1;
 //                    }
 //                }
+            } else {
+                linesCleared++;
+                board.rowsCompleted++;
+                if (board.rowsCompleted % 10 == 0) {
+                    board.level++;
+                }
             }
         }
+        return linesCleared;
     }
+
 
     public void rotateShape() {
         int[][] rotatedShape = transposeMatrix(coordinates);
