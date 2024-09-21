@@ -17,7 +17,6 @@ public class Game_Area extends JPanel implements KeyListener {
 
     private int state = GAME_STATE_PLAY;
 
-    private Clip music;
 
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
@@ -28,13 +27,16 @@ public class Game_Area extends JPanel implements KeyListener {
     private Timer looper;
     private Color[][] board;
 
+    private Clip music;
+
     private Random random;
 
     private Color[] colors = {Color.decode("#ed1c24"), Color.decode("#ff7f27"), Color.decode("#fff200"),
             Color.decode("#22b14c"), Color.decode("#00a2e8"), Color.decode("#a349a4"), Color.decode("#3f48cc")};
 
-    int level = 1;
+    int level = Options_Menu.game_level;
     int score = 0;
+    int rowsCompleted = 0;
     public boolean downPressed;
 
     public static void playSound(String soundFilePath) {
@@ -154,7 +156,6 @@ public class Game_Area extends JPanel implements KeyListener {
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_PLAY;
-                        music.stop();
                         topFrame.dispose();
                         board = null;
                         new Main_Menu();
@@ -173,7 +174,6 @@ public class Game_Area extends JPanel implements KeyListener {
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_OVER;
-                        music.stop();
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
@@ -208,6 +208,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     public void setCurrentShape() {
         currentShape = shapes[random.nextInt(shapes.length)];
+//        currentShape = shapes[0];
         currentShape.reset();
         checkGameOver();
     }
@@ -274,6 +275,8 @@ public class Game_Area extends JPanel implements KeyListener {
         y += 30;
         g.drawString("Score: " + score, x, y);
         y += 30;
+        g.drawString("Rows Completed: " + rowsCompleted, x, y);
+        y += 30;
 
         // Draw next window
         x -= 20;
@@ -300,36 +303,32 @@ public class Game_Area extends JPanel implements KeyListener {
                 playSound("resources/rotate_and_move.wav");
                 break;
             case KeyEvent.VK_DOWN:
-                playSound("resources/rotate_and_move.wav");
                 downPressed = true;
+                playSound("resources/rotate_and_move.wav");
                 break;
             case KeyEvent.VK_LEFT:
-                playSound("resources/rotate_and_move.wav");
                 currentShape.moveLeft();
+                playSound("resources/rotate_and_move.wav");
                 break;
             case KeyEvent.VK_RIGHT:
-                playSound("resources/rotate_and_move.wav");
                 currentShape.moveRight();
+                playSound("resources/rotate_and_move.wav");
                 break;
             case KeyEvent.VK_P:
                 if (state == GAME_STATE_PLAY) {
-                    music.stop();
                     state = GAME_STATE_PAUSE;
                 } else if (state == GAME_STATE_PAUSE) {
-                    music.start();
                     state = GAME_STATE_PLAY;
                 }
                 break;
             case KeyEvent.VK_M:
-                if(Options_Menu.music){
+                if (Options_Menu.music) {
                     music.stop();
                     Options_Menu.music = false;
-                }else {
+                } else {
                     music.start();
                     Options_Menu.music = true;
                 }
-            case KeyEvent.VK_S:
-                Options_Menu.sound_effects = !(Options_Menu.sound_effects);
         }
     }
 

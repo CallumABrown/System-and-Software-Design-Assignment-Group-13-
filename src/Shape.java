@@ -50,9 +50,9 @@ public class Shape {
                 }
             }
             int linesCleared = checkLine();
+            Game_Area.playSound("resources/place.wav");
             updateScore(linesCleared);
             //Change Current Shape
-            Game_Area.playSound("resources/place.wav");
             board.setCurrentShape();
             return;
         }
@@ -147,6 +147,7 @@ public class Shape {
 //                }
             } else {
                 linesCleared++;
+                Game_Area.playSound("resources/clear.wav");
                 board.rowsCompleted++;
                 if (board.rowsCompleted % 10 == 0) {
                     board.level++;
