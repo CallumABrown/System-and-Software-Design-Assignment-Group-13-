@@ -17,7 +17,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     private int state = GAME_STATE_PLAY;
 
-    private Clip clip;
+    private Clip music;
 
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
@@ -37,13 +37,31 @@ public class Game_Area extends JPanel implements KeyListener {
     int score = 0;
     public boolean downPressed;
 
-    void Music() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public static void playSound(String soundFilePath) {
+        try {
+            if (Options_Menu.sound_effects) {
+                File soundFile = new File(soundFilePath);
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+            }
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    void MusicAndSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         File background_music = new File("resources/8-bit-arcade.wav");
-        AudioInputStream audio_input = AudioSystem.getAudioInputStream(background_music);
-        clip = AudioSystem.getClip();
-        clip.open(audio_input);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        clip.start();
+        AudioInputStream music_input = AudioSystem.getAudioInputStream(background_music);
+        music = AudioSystem.getClip();
+        music.open(music_input);
+        music.loop(Clip.LOOP_CONTINUOUSLY);
+        if(Options_Menu.music) {
+            music.start();
+        }else{
+            music.stop();
+        }
     }
 
     private int[][] shapeParameters = {
@@ -58,7 +76,7 @@ public class Game_Area extends JPanel implements KeyListener {
         setLayout(null);
 
         try {
-            Music();
+            MusicAndSound();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
@@ -136,6 +154,7 @@ public class Game_Area extends JPanel implements KeyListener {
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_PLAY;
+                        music.stop();
                         topFrame.dispose();
                         board = null;
                         new Main_Menu();
@@ -154,6 +173,7 @@ public class Game_Area extends JPanel implements KeyListener {
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_OVER;
+                        music.stop();
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
@@ -277,31 +297,39 @@ public class Game_Area extends JPanel implements KeyListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 currentShape.rotateShape();
+                playSound("resources/rotate_and_move.wav");
                 break;
             case KeyEvent.VK_DOWN:
+                playSound("resources/rotate_and_move.wav");
                 downPressed = true;
                 break;
             case KeyEvent.VK_LEFT:
+                playSound("resources/rotate_and_move.wav");
                 currentShape.moveLeft();
                 break;
             case KeyEvent.VK_RIGHT:
+                playSound("resources/rotate_and_move.wav");
                 currentShape.moveRight();
                 break;
             case KeyEvent.VK_P:
                 if (state == GAME_STATE_PLAY) {
+                    music.stop();
                     state = GAME_STATE_PAUSE;
                 } else if (state == GAME_STATE_PAUSE) {
+                    music.start();
                     state = GAME_STATE_PLAY;
                 }
                 break;
             case KeyEvent.VK_M:
                 if(Options_Menu.music){
-                    clip.stop();
+                    music.stop();
                     Options_Menu.music = false;
                 }else {
-                    clip.start();
+                    music.start();
                     Options_Menu.music = true;
                 }
+            case KeyEvent.VK_S:
+                Options_Menu.sound_effects = !(Options_Menu.sound_effects);
         }
     }
 

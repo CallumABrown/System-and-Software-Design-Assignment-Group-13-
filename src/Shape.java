@@ -52,6 +52,7 @@ public class Shape {
             }
             checkLine();
             //Change Current Shape
+            Game_Area.playSound("resources/place.wav");
             board.setCurrentShape();
             return;
         }
