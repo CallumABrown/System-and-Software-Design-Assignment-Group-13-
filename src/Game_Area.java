@@ -17,6 +17,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     private int state = GAME_STATE_PLAY;
 
+
     private static int FPS = 60;
     private static int delay = 1000 / FPS;
 
@@ -26,19 +27,22 @@ public class Game_Area extends JPanel implements KeyListener {
     private Timer looper;
     private Color[][] board;
 
+    private Clip clip;
+
     private Random random;
 
     private Color[] colors = {Color.decode("#ed1c24"), Color.decode("#ff7f27"), Color.decode("#fff200"),
             Color.decode("#22b14c"), Color.decode("#00a2e8"), Color.decode("#a349a4"), Color.decode("#3f48cc")};
 
-    int level = 1;
+    int level = Options_Menu.game_level;
     int score = 0;
+    int rowsCompleted = 0;
     public boolean downPressed;
 
     void Music() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         File background_music = new File("resources/8-bit-arcade.wav");
         AudioInputStream audio_input = AudioSystem.getAudioInputStream(background_music);
-        Clip clip = AudioSystem.getClip();
+        clip = AudioSystem.getClip();
         clip.open(audio_input);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.start();
@@ -186,6 +190,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     public void setCurrentShape() {
         currentShape = shapes[random.nextInt(shapes.length)];
+//        currentShape = shapes[0];
         currentShape.reset();
         checkGameOver();
     }
@@ -252,6 +257,8 @@ public class Game_Area extends JPanel implements KeyListener {
         y += 30;
         g.drawString("Score: " + score, x, y);
         y += 30;
+        g.drawString("Rows Completed: " + rowsCompleted, x, y);
+        y += 30;
 
         // Draw next window
         x -= 20;
@@ -292,6 +299,14 @@ public class Game_Area extends JPanel implements KeyListener {
                     state = GAME_STATE_PLAY;
                 }
                 break;
+            case KeyEvent.VK_M:
+                if (Options_Menu.music) {
+                    clip.stop();
+                    Options_Menu.music = false;
+                } else {
+                    clip.start();
+                    Options_Menu.music = true;
+                }
         }
     }
 

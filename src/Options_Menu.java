@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Options_Menu extends JFrame{
+public class Options_Menu extends JFrame {
     public static Integer window_width;
     public static Integer window_height;
     public static Integer game_level;
@@ -16,7 +16,8 @@ public class Options_Menu extends JFrame{
     public static Boolean extend;
     public static String player1_type;
     public static String player2_type;
-    public Options_Menu(){
+
+    public Options_Menu() {
         setTitle("Tetris");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -32,25 +33,25 @@ public class Options_Menu extends JFrame{
         gbc.insets = new Insets(20, 50, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        JSlider slider1 = new JSlider(5, 15, window_width);
-        slider1.setMajorTickSpacing(1);
-        slider1.setMinorTickSpacing(1);
-        slider1.setPaintTrack(true);
-        slider1.setPaintTicks(true);
-        slider1.setPaintLabels(true);
-        mainPanel.add(slider1, gbc);
+        JSlider widthSlider = new JSlider(5, 15, window_width);
+        widthSlider.setMajorTickSpacing(1);
+        widthSlider.setMinorTickSpacing(1);
+        widthSlider.setPaintTrack(true);
+        widthSlider.setPaintTicks(true);
+        widthSlider.setPaintLabels(true);
+        mainPanel.add(widthSlider, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 50, 0, 30);
-        JLabel label1 = new JLabel("Field Width (Number of cells): " + slider1.getValue());
+        JLabel label1 = new JLabel("Field Width (Number of cells): " + widthSlider.getValue());
         mainPanel.add(label1, gbc);
 
-        slider1.addChangeListener(new ChangeListener() {
+        widthSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                label1.setText("Field Width (Number of cells): " + slider1.getValue());
-                window_width = slider1.getValue();
+                label1.setText("Field Width (Number of cells): " + widthSlider.getValue());
+                window_width = widthSlider.getValue();
             }
         });
 
@@ -60,25 +61,25 @@ public class Options_Menu extends JFrame{
         gbc.insets = new Insets(20, 50, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        JSlider slider2 = new JSlider(15, 30, window_height);
-        slider2.setMajorTickSpacing(1);
-        slider2.setMinorTickSpacing(1);
-        slider2.setPaintTrack(true);
-        slider2.setPaintTicks(true);
-        slider2.setPaintLabels(true);
-        mainPanel.add(slider2, gbc);
+        JSlider heightSlider = new JSlider(15, 30, window_height);
+        heightSlider.setMajorTickSpacing(1);
+        heightSlider.setMinorTickSpacing(1);
+        heightSlider.setPaintTrack(true);
+        heightSlider.setPaintTicks(true);
+        heightSlider.setPaintLabels(true);
+        mainPanel.add(heightSlider, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.insets = new Insets(20, 50, 0, 30);
-        JLabel label2 = new JLabel("Field Height (Number of cells): " + slider2.getValue());
+        JLabel label2 = new JLabel("Field Height (Number of cells): " + heightSlider.getValue());
         mainPanel.add(label2, gbc);
 
-        slider2.addChangeListener(new ChangeListener() {
+        heightSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                label2.setText("Field Height (Number of cells): " + slider2.getValue());
-                window_height = slider2.getValue();
+                label2.setText("Field Height (Number of cells): " + heightSlider.getValue());
+                window_height = heightSlider.getValue();
             }
         });
 
@@ -88,24 +89,25 @@ public class Options_Menu extends JFrame{
         gbc.insets = new Insets(20, 50, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        JSlider slider3 = new JSlider(15, 30, 20);
-        slider3.setMajorTickSpacing(1);
-        slider3.setMinorTickSpacing(1);
-        slider3.setPaintTrack(true);
-        slider3.setPaintTicks(true);
-        slider3.setPaintLabels(true);
-        mainPanel.add(slider3, gbc);
+        JSlider difficultySlider = new JSlider(1, 10, game_level);
+        difficultySlider.setMajorTickSpacing(1);
+        difficultySlider.setMinorTickSpacing(1);
+        difficultySlider.setPaintTrack(true);
+        difficultySlider.setPaintTicks(true);
+        difficultySlider.setPaintLabels(true);
+        mainPanel.add(difficultySlider, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.insets = new Insets(20, 50, 0, 30);
-        JLabel label3 = new JLabel("Game Level: " + slider2.getValue());
+        JLabel label3 = new JLabel("Game Level: " + game_level);
         mainPanel.add(label3, gbc);
 
-        slider3.addChangeListener(new ChangeListener() {
+        difficultySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                label3.setText("Game Level: " + slider3.getValue());
+                game_level = difficultySlider.getValue();
+                label3.setText("Game Level: " + game_level);
             }
         });
 
@@ -127,7 +129,7 @@ public class Options_Menu extends JFrame{
         mainPanel.add(label7, gbc);
 
         gbc.gridy = 5;
-        JLabel label8= new JLabel("Player Two Type: ");
+        JLabel label8 = new JLabel("Player Two Type: ");
         mainPanel.add(label8, gbc);
 
         gbc.insets = new Insets(25, 230, 0, 0);
@@ -240,12 +242,13 @@ public class Options_Menu extends JFrame{
 
         setVisible(true);
 
-        addWindowListener (new WindowAdapter() {
-            public void windowClosing (WindowEvent e) {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
                 dispose();
             }
         });
     }
+
     private void centerWindow() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
