@@ -74,7 +74,9 @@ public class Game_Area extends JPanel implements KeyListener {
     private Shape[] shapes = new Shape[7];
     private Shape currentShape;
 
-    public Game_Area() {
+    private int playerId;
+
+    public Game_Area(int playerId) {
         setLayout(null);
 
         try {
@@ -155,8 +157,9 @@ public class Game_Area extends JPanel implements KeyListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        state = GAME_STATE_PLAY;
+                        state = GAME_STATE_OVER;
                         topFrame.dispose();
+                        music.stop();
                         board = null;
                         new Main_Menu();
                     } else {
@@ -174,6 +177,7 @@ public class Game_Area extends JPanel implements KeyListener {
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
                         state = GAME_STATE_OVER;
+                        music.stop();
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
@@ -196,7 +200,7 @@ public class Game_Area extends JPanel implements KeyListener {
         // Adjust button position on layout
         JButton returnButton = (JButton) getComponent(0);
         if (returnButton != null) {
-            returnButton.setBounds(getWidth() - 120, getHeight() - 40, 100, 30);
+            returnButton.setBounds(Options_Menu.window_width * BLOCK_SIZE + 40, getHeight() - 40, 100, 30);
         }
     }
 
@@ -228,7 +232,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        int TEXT_LOCATION = getWidth() - 150;
+        int TEXT_LOCATION = Options_Menu.window_width * BLOCK_SIZE + 40;
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
@@ -268,7 +272,7 @@ public class Game_Area extends JPanel implements KeyListener {
 
         int x = TEXT_LOCATION;
         int y = BOARD_HEIGHT;
-        g.drawRect(x, y, 100, 100);
+        g.drawRect(x, y, 140, 130);
         x += 20;
         y += 40;
         g.drawString("Level: " + level, x, y);
@@ -297,38 +301,62 @@ public class Game_Area extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                currentShape.rotateShape();
-                playSound("resources/rotate_and_move.wav");
-                break;
-            case KeyEvent.VK_DOWN:
-                downPressed = true;
-                playSound("resources/rotate_and_move.wav");
-                break;
-            case KeyEvent.VK_LEFT:
-                currentShape.moveLeft();
-                playSound("resources/rotate_and_move.wav");
-                break;
-            case KeyEvent.VK_RIGHT:
-                currentShape.moveRight();
-                playSound("resources/rotate_and_move.wav");
-                break;
-            case KeyEvent.VK_P:
-                if (state == GAME_STATE_PLAY) {
-                    state = GAME_STATE_PAUSE;
-                } else if (state == GAME_STATE_PAUSE) {
-                    state = GAME_STATE_PLAY;
-                }
-                break;
-            case KeyEvent.VK_M:
-                if (Options_Menu.music) {
-                    music.stop();
-                    Options_Menu.music = false;
-                } else {
-                    music.start();
-                    Options_Menu.music = true;
-                }
+        if (playerId == 1) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                    currentShape.rotateShape();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_DOWN:
+                    downPressed = true;
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_LEFT:
+                    currentShape.moveLeft();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    currentShape.moveRight();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_P:
+                    if (state == GAME_STATE_PLAY) {
+                        state = GAME_STATE_PAUSE;
+                    } else if (state == GAME_STATE_PAUSE) {
+                        state = GAME_STATE_PLAY;
+                    }
+                    break;
+                case KeyEvent.VK_M:
+                    if (Options_Menu.music) {
+                        music.stop();
+                        Options_Menu.music = false;
+                    } else {
+                        music.start();
+                        Options_Menu.music = true;
+                    }
+            }
+        }
+
+        // Player 2 controls with W A S D
+        if (playerId == 2) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W: // Rotate
+                    currentShape.rotateShape();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_S: // Down
+                    downPressed = true;
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_A: // Left
+                    currentShape.moveLeft();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_D: // Right
+                    currentShape.moveRight();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+            }
         }
     }
 
