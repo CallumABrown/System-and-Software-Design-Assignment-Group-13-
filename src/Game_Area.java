@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Game_Area extends JPanel implements KeyListener {
-
+    private High_Score_Menu highScoreMenu;
     public static int GAME_STATE_PLAY = 0;
     public static int GAME_STATE_PAUSE = 1;
     public static int GAME_STATE_OVER = 2;
@@ -74,7 +74,7 @@ public class Game_Area extends JPanel implements KeyListener {
     private Shape[] shapes = new Shape[7];
     private Shape currentShape;
 
-    private int playerId;
+    private int playerId = 1;
 
     public Game_Area(int playerId) {
         setLayout(null);
@@ -217,13 +217,38 @@ public class Game_Area extends JPanel implements KeyListener {
         checkGameOver();
     }
 
+    private void submitScore(int score) {
+        String playerName = enterPlayerName(); // Get player's name
+        High_Score_Menu highScoreMenu = new High_Score_Menu(); // Create new instance here
+        highScoreMenu.addHighScore(playerName, score); // Use entered name for the high score
+
+        // After saving the score, return to the main menu
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.dispose(); // Close the current game window
+    }
+
+
+    private String enterPlayerName() {
+        // Prompt the user for their name
+        String playerName = JOptionPane.showInputDialog(this, "Enter your name:", "High Score Entry", JOptionPane.PLAIN_MESSAGE);
+        // Validate the input (optional)
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player"; // Default name if no input
+        }
+        return playerName;
+    }
+
+
     private void checkGameOver() {
         int[][] coordinates = currentShape.getCoordinates();
         for (int row = 0; row < coordinates.length; row++) {
             for (int col = 0; col < coordinates[0].length; col++) {
                 if (coordinates[row][col] != 0) {
                     if (board[row + currentShape.getY()][col + currentShape.getX()] != null) {
-                        state = GAME_STATE_OVER;
+                        if (state != GAME_STATE_OVER) { // Ensure we only submit score once
+                            state = GAME_STATE_OVER;
+                            submitScore(score);
+                        }
                     }
                 }
             }

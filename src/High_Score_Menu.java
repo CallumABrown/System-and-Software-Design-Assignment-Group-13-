@@ -129,6 +129,23 @@ public class High_Score_Menu extends JFrame {
         }
     }
 
+    public void addHighScore(String playerName, int score) {
+        HighScoreClass newHighScore = new HighScoreClass(playerName, score);
+
+        // Add the new score to the leaderboard
+        highScoresLeaderboard.add(newHighScore);
+        highScoresLeaderboard.sort((hs1, hs2) -> Integer.compare(hs2.score, hs1.score));
+
+        // Keep only the top high scores
+        if (highScoresLeaderboard.size() > HIGH_SCORES_COUNT) {
+            highScoresLeaderboard = highScoresLeaderboard.subList(0, HIGH_SCORES_COUNT);
+        }
+
+        saveHighScores(); // Save updated high scores to file
+        loadHighScores(); // Reload high scores to reflect any changes
+        displayHighScores((Panel)getContentPane().getComponent(0), new GridBagConstraints()); // Refresh display
+    }
+
     private void resetHighScores() {
         createDefaultHighScores(); // Create a new default file
         loadHighScores(); // Reload the scores from the file
