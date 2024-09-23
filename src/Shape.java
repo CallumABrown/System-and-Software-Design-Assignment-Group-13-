@@ -1,10 +1,12 @@
 import java.awt.*;
 
 public class Shape {
-    private int x = (Options_Menu.window_width / 2) - 1, y = 0;
+    private int x = (Options_Menu.window_width / 2) - 1;
+    private double y = 0;
     //    private int level;
     private int normal;
-    private int fast = 50;
+    //    private int fast = 50;
+    private int fast = 5;
     private int delayTimeForMovement = normal;
     private long beginTime;
 
@@ -22,7 +24,8 @@ public class Shape {
         this.board = board;
         this.color = color;
 //        this.level = board.level;
-        this.normal = 600 - ((board.level - 1) * 50);
+        this.normal = 50 - ((board.level - 1) * 3);
+//        this.normal = 600 - ((board.level - 1) * 50);
     }
 
     public void setX(int x) {
@@ -45,7 +48,7 @@ public class Shape {
             for (int row = 0; row < coordinates.length; row++) {
                 for (int col = 0; col < coordinates[0].length; col++) {
                     if (coordinates[row][col] != 0) {
-                        board.getBoard()[y + row][x + col] = color;
+                        board.getBoard()[(int) (y + row)][x + col] = color;
                     }
                 }
             }
@@ -62,7 +65,7 @@ public class Shape {
             for (int row = 0; row < coordinates.length; row++) {
                 for (int col = 0; col < coordinates[row].length; col++) {
                     if (coordinates[row][col] != 0) {
-                        if (board.getBoard()[y + row][x + deltaX + col] != null) {
+                        if (board.getBoard()[(int) (y + row)][x + deltaX + col] != null) {
                             moveX = false;
                         }
                     }
@@ -76,23 +79,26 @@ public class Shape {
         if (board.downPressed) {
             delayTimeForMovement = fast;
         } else {
-            normal = 600 - ((board.level - 1) * 50);
+//            normal = 600 - ((board.level - 1) * 50);
+            normal = 50 - ((board.level - 1) * 3);
             delayTimeForMovement = normal;
         }
+        System.out.println(delayTimeForMovement);
         if (System.currentTimeMillis() - beginTime > delayTimeForMovement) {
             //Vertical Movement
-            if (!((y + 1 + coordinates.length) > Game_Area.BOARD_HEIGHT)) {
+            if (!(((int) y + 1 + coordinates.length) > Game_Area.BOARD_HEIGHT)) {
                 for (int row = 0; row < coordinates.length; row++) {
                     for (int col = 0; col < coordinates[row].length; col++) {
                         if (coordinates[row][col] != 0) {
-                            if (board.getBoard()[y + 1 + row][x + deltaX + col] != null) {
+                            if (board.getBoard()[(int) (y + 1 + row)][x + deltaX + col] != null) {
                                 collision = true;
                             }
                         }
                     }
                 }
                 if (!collision) {
-                    y++;
+                    y = y + 0.1;
+//                    y++;
                 }
             } else {
                 collision = true;
@@ -171,7 +177,7 @@ public class Shape {
         for (int row = 0; row < rotatedShape.length; row++) {
             for (int col = 0; col < rotatedShape[row].length; col++) {
                 if (rotatedShape[row][col] != 0) {
-                    if (board.getBoard()[y + row][x + col] != null) {
+                    if (board.getBoard()[(int) (y + row)][x + col] != null) {
                         return;
                     }
                 }
@@ -206,7 +212,7 @@ public class Shape {
             for (int col = 0; col < coordinates[0].length; col++) {
                 if (coordinates[row][col] != 0) {
                     g.setColor(color);
-                    g.fillRect(col * Game_Area.BLOCK_SIZE + x * Game_Area.BLOCK_SIZE, row * Game_Area.BLOCK_SIZE + y * Game_Area.BLOCK_SIZE, Game_Area.BLOCK_SIZE, Game_Area.BLOCK_SIZE);
+                    g.fillRect(col * Game_Area.BLOCK_SIZE + x * Game_Area.BLOCK_SIZE, (row * Game_Area.BLOCK_SIZE + (int) (y * Game_Area.BLOCK_SIZE)), Game_Area.BLOCK_SIZE, Game_Area.BLOCK_SIZE);
                 }
             }
         }
@@ -228,7 +234,7 @@ public class Shape {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 }

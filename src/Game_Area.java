@@ -18,7 +18,7 @@ public class Game_Area extends JPanel implements KeyListener {
     private int state = GAME_STATE_PLAY;
 
 
-    private static int FPS = 60;
+    private static int FPS = 200;
     private static int delay = 1000 / FPS;
 
     public static int BOARD_WIDTH = Options_Menu.window_width;
@@ -59,9 +59,9 @@ public class Game_Area extends JPanel implements KeyListener {
         music = AudioSystem.getClip();
         music.open(music_input);
         music.loop(Clip.LOOP_CONTINUOUSLY);
-        if(Options_Menu.music) {
+        if (Options_Menu.music) {
             music.start();
-        }else{
+        } else {
             music.stop();
         }
     }
@@ -244,7 +244,7 @@ public class Game_Area extends JPanel implements KeyListener {
         for (int row = 0; row < coordinates.length; row++) {
             for (int col = 0; col < coordinates[0].length; col++) {
                 if (coordinates[row][col] != 0) {
-                    if (board[row + currentShape.getY()][col + currentShape.getX()] != null) {
+                    if (board[(int) (row + currentShape.getY())][col + currentShape.getX()] != null) {
                         if (state != GAME_STATE_OVER) { // Ensure we only submit score once
                             state = GAME_STATE_OVER;
                             submitScore(score);
@@ -261,17 +261,6 @@ public class Game_Area extends JPanel implements KeyListener {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        currentShape.render(g);
-
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                if (board[row][col] != null) {
-                    g.setColor(board[row][col]);
-                    g.fillRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                }
-            }
-        }
 
         // Draw the Board
         g.setColor(Color.WHITE);
@@ -313,6 +302,16 @@ public class Game_Area extends JPanel implements KeyListener {
         g.drawRect(x, y, 100, 100);
         g.drawString("NEXT", x + 20, y + 30);
 
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (board[row][col] != null) {
+                    g.setColor(board[row][col]);
+                    g.fillRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                }
+            }
+        }
+
+        currentShape.render(g);
     }
 
     public Color[][] getBoard() {
