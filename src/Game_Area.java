@@ -9,14 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class Game_Area extends JPanel implements KeyListener {
+public class Game_Area extends JPanel {
     private High_Score_Menu highScoreMenu;
-    public static int GAME_STATE_PLAY = 0;
-    public static int GAME_STATE_PAUSE = 1;
-    public static int GAME_STATE_OVER = 2;
-
-    private int state = GAME_STATE_PLAY;
-
 
     private static int FPS = 200;
     private static int delay = 1000 / FPS;
@@ -27,9 +21,8 @@ public class Game_Area extends JPanel implements KeyListener {
     private Timer looper;
     private Color[][] board;
 
-    private Clip music;
 
-    private Random random;
+//    private Random random;
 
     private Color[] colors = {Color.decode("#ed1c24"), Color.decode("#ff7f27"), Color.decode("#fff200"),
             Color.decode("#22b14c"), Color.decode("#00a2e8"), Color.decode("#a349a4"), Color.decode("#3f48cc")};
@@ -39,32 +32,6 @@ public class Game_Area extends JPanel implements KeyListener {
     int rowsCompleted = 0;
     public boolean downPressed;
 
-    public static void playSound(String soundFilePath) {
-        try {
-            if (Options_Menu.sound_effects) {
-                File soundFile = new File(soundFilePath);
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            }
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    void MusicAndSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        File background_music = new File("resources/8-bit-arcade.wav");
-        AudioInputStream music_input = AudioSystem.getAudioInputStream(background_music);
-        music = AudioSystem.getClip();
-        music.open(music_input);
-        music.loop(Clip.LOOP_CONTINUOUSLY);
-        if (Options_Menu.music) {
-            music.start();
-        } else {
-            music.stop();
-        }
-    }
 
     private int[][] shapeParameters = {
             {1, 1, 1},
@@ -74,23 +41,18 @@ public class Game_Area extends JPanel implements KeyListener {
     private Shape[] shapes = new Shape[7];
     private Shape currentShape;
 
-    private int playerId = 1;
+    private Game_Screen gameScreen;
 
-    public Game_Area(int playerId) {
+    public Game_Area(Game_Screen gameScreen) {
+        this.gameScreen = gameScreen;
         setLayout(null);
-
-        try {
-            MusicAndSound();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
 
         BOARD_WIDTH = Options_Menu.window_width;
         BOARD_HEIGHT = Options_Menu.window_height;
 
         board = new Color[BOARD_HEIGHT][BOARD_WIDTH];
 
-        random = new Random();
+//        random = new Random();
 
         shapes[0] = new Shape(new int[][]{
                 {1, 1, 1, 1} // I shape;
@@ -147,7 +109,7 @@ public class Game_Area extends JPanel implements KeyListener {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (state == GAME_STATE_PAUSE) {
+                if (gameScreen.state == Constants.GAME_STATE_PAUSE) {
                     int response = JOptionPane.showConfirmDialog(
                             Game_Area.this,
                             "Are you sure you want to return to the main menu?",
@@ -157,16 +119,16 @@ public class Game_Area extends JPanel implements KeyListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        state = GAME_STATE_OVER;
+                        gameScreen.state = Constants.GAME_STATE_OVER;
                         topFrame.dispose();
-                        music.stop();
+                        gameScreen.music.stop();
                         board = null;
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();
                     }
                 } else {
-                    state = GAME_STATE_PAUSE;
+                    gameScreen.state = Constants.GAME_STATE_PAUSE;
                     int response = JOptionPane.showConfirmDialog(
                             Game_Area.this,
                             "Are you sure you want to return to the main menu?",
@@ -176,13 +138,13 @@ public class Game_Area extends JPanel implements KeyListener {
                     );
                     if (response == JOptionPane.YES_OPTION) {
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Game_Area.this);
-                        state = GAME_STATE_OVER;
-                        music.stop();
+                        gameScreen.state = Constants.GAME_STATE_OVER;
+                        gameScreen.music.stop();
                         topFrame.dispose();
                         new Main_Menu();
                     } else {
                         requestFocusInWindow();
-                        state = GAME_STATE_PLAY;
+                        gameScreen.state = Constants.GAME_STATE_PLAY;
                     }
                 }
             }
@@ -191,7 +153,6 @@ public class Game_Area extends JPanel implements KeyListener {
         add(returnButton);
 
         setFocusable(true);
-        addKeyListener(this);
     }
 
     @Override
@@ -205,16 +166,20 @@ public class Game_Area extends JPanel implements KeyListener {
     }
 
     private void update() {
-        if (state == GAME_STATE_PLAY) {
+        if (gameScreen.state == Constants.GAME_STATE_PLAY) {
             currentShape.update();
         }
     }
 
     public void setCurrentShape() {
-        currentShape = shapes[random.nextInt(shapes.length)];
+        currentShape = shapes[gameScreen.random.nextInt(shapes.length)];
 //        currentShape = shapes[0];
         currentShape.reset();
         checkGameOver();
+    }
+
+    public Shape getCurrentShape() {
+        return currentShape;
     }
 
     private void submitScore(int score) {
@@ -245,8 +210,8 @@ public class Game_Area extends JPanel implements KeyListener {
             for (int col = 0; col < coordinates[0].length; col++) {
                 if (coordinates[row][col] != 0) {
                     if (board[(int) (row + currentShape.getY())][col + currentShape.getX()] != null) {
-                        if (state != GAME_STATE_OVER) { // Ensure we only submit score once
-                            state = GAME_STATE_OVER;
+                        if (gameScreen.state != Constants.GAME_STATE_OVER) { // Ensure we only submit score once
+                            gameScreen.state = Constants.GAME_STATE_OVER;
                             submitScore(score);
                         }
                     }
@@ -272,12 +237,12 @@ public class Game_Area extends JPanel implements KeyListener {
             g.drawLine(col * BLOCK_SIZE, 0, col * BLOCK_SIZE, BLOCK_SIZE * BOARD_HEIGHT);
         }
 
-        if (state == GAME_STATE_PAUSE) {
+        if (gameScreen.state == Constants.GAME_STATE_PAUSE) {
             g.setColor(Color.white);
             g.drawString("GAME PAUSED", TEXT_LOCATION, 200);
             g.drawString("PRESS P TO PLAY", TEXT_LOCATION, 250);
         }
-        if (state == GAME_STATE_OVER) {
+        if (gameScreen.state == Constants.GAME_STATE_OVER) {
             g.setColor(Color.white);
             g.drawString("GAME OVER", TEXT_LOCATION, 200);
         }
@@ -318,77 +283,160 @@ public class Game_Area extends JPanel implements KeyListener {
         return board;
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (playerId == 1) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_UP:
-                    currentShape.rotateShape();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_DOWN:
-                    downPressed = true;
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_LEFT:
-                    currentShape.moveLeft();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    currentShape.moveRight();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_P:
-                    if (state == GAME_STATE_PLAY) {
-                        state = GAME_STATE_PAUSE;
-                    } else if (state == GAME_STATE_PAUSE) {
-                        state = GAME_STATE_PLAY;
-                    }
-                    break;
-                case KeyEvent.VK_M:
-                    if (Options_Menu.music) {
-                        music.stop();
-                        Options_Menu.music = false;
-                    } else {
-                        music.start();
-                        Options_Menu.music = true;
-                    }
-            }
-        }
-
-        // Player 2 controls with W A S D
-        if (playerId == 2) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_W: // Rotate
-                    currentShape.rotateShape();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_S: // Down
-                    downPressed = true;
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_A: // Left
-                    currentShape.moveLeft();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-                case KeyEvent.VK_D: // Right
-                    currentShape.moveRight();
-                    playSound("resources/rotate_and_move.wav");
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            downPressed = false;
-//            currentShape.speedDown();
-        }
-    }
+    //    @Override
+//    public void keyTyped(KeyEvent e) {
+//
+//    }
+//    @Override
+//    public void keyPressed(KeyEvent e) {
+//        if (playerId == 1) {
+//            switch (e.getKeyCode()) {
+//                case KeyEvent.VK_UP:
+//                    currentShape.rotateShape();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_DOWN:
+//                    downPressed = true;
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_LEFT:
+//                    currentShape.moveLeft();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_RIGHT:
+//                    currentShape.moveRight();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_P:
+//                    if (state == GAME_STATE_PLAY) {
+//                        state = GAME_STATE_PAUSE;
+//                    } else if (state == GAME_STATE_PAUSE) {
+//                        state = GAME_STATE_PLAY;
+//                    }
+//                    break;
+//                case KeyEvent.VK_M:
+//                    if (Options_Menu.music) {
+//                        music.stop();
+//                        Options_Menu.music = false;
+//                    } else {
+//                        music.start();
+//                        Options_Menu.music = true;
+//                    }
+//            }
+//        }
+//
+//        // Player 2 controls with W A S D
+//        else {
+//            switch (e.getKeyCode()) {
+//                case KeyEvent.VK_W: // Rotate
+//                    currentShape.rotateShape();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_S: // Down
+//                    downPressed = true;
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_A: // Left
+//                    currentShape.moveLeft();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_D: // Right
+//                    currentShape.moveRight();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void keyReleased(KeyEvent e) {
+//        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+//            downPressed = false;
+////            currentShape.speedDown();
+//        }
+//    }
+//    class Player1KeyListener implements KeyListener {
+//
+//        @Override
+//        public void keyPressed(KeyEvent e) {
+//            switch (e.getKeyCode()) {
+//                case KeyEvent.VK_UP:
+//                    currentShape.rotateShape();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_DOWN:
+//                    downPressed = true;
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_LEFT:
+//                    currentShape.moveLeft();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_RIGHT:
+//                    currentShape.moveRight();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_P:
+//                    if (state == GAME_STATE_PLAY) {
+//                        state = GAME_STATE_PAUSE;
+//                    } else if (state == GAME_STATE_PAUSE) {
+//                        state = GAME_STATE_PLAY;
+//                    }
+//                    break;
+//                case KeyEvent.VK_M:
+//                    if (Options_Menu.music) {
+//                        music.stop();
+//                        Options_Menu.music = false;
+//                    } else {
+//                        music.start();
+//                        Options_Menu.music = true;
+//                    }
+//            }
+//        }
+//
+//        @Override
+//        public void keyReleased(KeyEvent e) {
+//            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+//                downPressed = false;
+//                //currentShape.speedDown();
+//            }
+//        }
+//
+//        @Override
+//        public void keyTyped(KeyEvent e) {
+//        }
+//    }
+//
+//    class Player2KeyListener implements KeyListener {
+//        @Override
+//        public void keyTyped(KeyEvent e) {
+//
+//        }
+//
+//        @Override
+//        public void keyPressed(KeyEvent e) {
+//            switch (e.getKeyCode()) {
+//                case KeyEvent.VK_W: // Rotate
+//                    currentShape.rotateShape();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_S: // Down
+//                    downPressed = true;
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_A: // Left
+//                    currentShape.moveLeft();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//                case KeyEvent.VK_D: // Right
+//                    currentShape.moveRight();
+//                    playSound("resources/rotate_and_move.wav");
+//                    break;
+//            }
+//        }
+//
+//        @Override
+//        public void keyReleased(KeyEvent e) {
+//        }
+//    }
 }

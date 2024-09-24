@@ -1,10 +1,48 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 public class Game_Screen extends JFrame {
     public static int WIDTH, HEIGHT;
     private Game_Area board;
     private Game_Area board2;
+    public int state = Constants.GAME_STATE_PLAY;
+
+    public Clip music;
+
+    public Random random = new Random();
+
+    public static void playSound(String soundFilePath) {
+        try {
+            if (Options_Menu.sound_effects) {
+                File soundFile = new File(soundFilePath);
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+            }
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    void MusicAndSound() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        File background_music = new File("resources/8-bit-arcade.wav");
+        AudioInputStream music_input = AudioSystem.getAudioInputStream(background_music);
+        music = AudioSystem.getClip();
+        music.open(music_input);
+        music.loop(Clip.LOOP_CONTINUOUSLY);
+        if (Options_Menu.music) {
+            music.start();
+        } else {
+            music.stop();
+        }
+    }
 
     public Game_Screen() {
         setTitle("Tetris");
@@ -28,12 +66,21 @@ public class Game_Screen extends JFrame {
         JPanel gamePanel = new JPanel();
         gamePanel.setLayout(new GridLayout(1, 2)); // Two columns for the game boards
 
-        board = new Game_Area(1);
-        gamePanel.add(board); // Add the first board
 
         if (Options_Menu.extend) {
-            board2 = new Game_Area(2);
-            gamePanel.add(board2); // Add the second board side-by-side
+            board = new Game_Area(this);
+            board.addKeyListener(new Player2KeyListener(board));
+
+            gamePanel.add(board); // Add the first board
+
+            board2 = new Game_Area(this);
+            board.addKeyListener(new Player1KeyListener(board2));// Add the second board side-by-side
+            gamePanel.add(board2);
+        } else {
+            board = new Game_Area(this);
+            board.addKeyListener(new Player1KeyListener(board));
+
+            gamePanel.add(board); // Add the first board
         }
 
         // Add the gamePanel to the center of the frame
@@ -51,13 +98,111 @@ public class Game_Screen extends JFrame {
 
         setVisible(true);
 
-        addKeyListener(board);
-        if (board2 != null) {
-            addKeyListener(board2);
+        try {
+            MusicAndSound();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
         new Game_Screen();
+    }
+
+    class Player1KeyListener implements KeyListener {
+        Game_Area board;
+
+        Player1KeyListener(Game_Area board) {
+            this.board = board;
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                    board.getCurrentShape().rotateShape();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_DOWN:
+                    board.downPressed = true;
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_LEFT:
+                    board.getCurrentShape().moveLeft();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    board.getCurrentShape().moveRight();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_P:
+                    if (state == Constants.GAME_STATE_PLAY) {
+                        state = Constants.GAME_STATE_PAUSE;
+                    } else if (state == Constants.GAME_STATE_PAUSE) {
+                        state = Constants.GAME_STATE_PLAY;
+                    }
+                    break;
+                case KeyEvent.VK_M:
+                    if (Options_Menu.music) {
+                        music.stop();
+                        Options_Menu.music = false;
+                    } else {
+                        music.start();
+                        Options_Menu.music = true;
+                    }
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                board.downPressed = false;
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+    }
+
+    class Player2KeyListener implements KeyListener {
+        Game_Area board;
+
+        Player2KeyListener(Game_Area board) {
+            this.board = board;
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    board.getCurrentShape().rotateShape();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_S:
+                    board.downPressed = true;
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_A:
+                    board.getCurrentShape().moveLeft();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+                case KeyEvent.VK_D:
+                    board.getCurrentShape().moveRight();
+                    playSound("resources/rotate_and_move.wav");
+                    break;
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_S) {
+                board.downPressed = false;
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
     }
 }
