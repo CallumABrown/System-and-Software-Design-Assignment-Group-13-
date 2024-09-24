@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
+import java.net.Socket;
+import com.google.gson.Gson;
 
 public class Game_Area extends JPanel {
+    private PureGame pureGame;
     private High_Score_Menu highScoreMenu;
 
     private static int FPS = 200;
@@ -40,12 +42,24 @@ public class Game_Area extends JPanel {
 
     private Shape[] shapes = new Shape[7];
     private Shape currentShape;
+    private Shape nextShape;
 
     private Game_Screen gameScreen;
 
     public Game_Area(Game_Screen gameScreen) {
         this.gameScreen = gameScreen;
         setLayout(null);
+        pureGame = new PureGame(BOARD_WIDTH, BOARD_HEIGHT);
+
+        JButton sendStateButton = new JButton("Send Game State");
+        sendStateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendGameStateToServer(); // Method to send the game state
+            }
+        });
+
+        add(sendStateButton);
 
         BOARD_WIDTH = Options_Menu.window_width;
         BOARD_HEIGHT = Options_Menu.window_height;
@@ -155,6 +169,79 @@ public class Game_Area extends JPanel {
         setFocusable(true);
     }
 
+    private void sendGameStateToServer() {
+        // Use the existing pureGame instance
+        // Ensure PureGame has a proper constructor and methods to retrieve state
+
+        // Populate the PureGame object with current game state
+        pureGame.setCurrentShape(currentShape.getCoordinates()); // Assuming this returns the current shape
+
+        pureGame.setNextShape(new int[][]{{1, 1, 1, 1}}); // Example assignment
+
+        // Send the game state to the server
+        try (Socket socket = new Socket("localhost", 3000);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            // Convert PureGame object to JSON
+            Gson gson = new Gson();
+            String jsonGameState = gson.toJson(pureGame);
+            out.println(jsonGameState);
+            System.out.println("Sent game state to server: " + jsonGameState);
+
+            // Wait for the server's response
+            String response = in.readLine();
+            System.out.println("Received response from server: " + response);
+
+            // Convert the JSON response to an OpMove object
+            OpMove move = gson.fromJson(response, OpMove.class);
+            System.out.println("Optimal Move: X=" + move.opX() + ", Rotations=" + move.opRotate());
+
+            // Apply the move based on opX and opRotate values
+            applyMove(move);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private Color[][] getBoardState() {
+        // Return the current state of the board as a 2D array
+        return board; // Adjust as necessary based on your implementation
+    }
+
+    private void applyMove(OpMove move) {
+        // Implement logic to apply the optimal move to the current game state
+        if (move.opX() == 0) {
+            System.out.println("Place the piece at the left-most position.");
+        } else {
+            System.out.println("Move the piece to X=" + move.opX());
+        }
+        if (move.opRotate() == 0) {
+            System.out.println("No rotation needed.");
+        } else {
+            System.out.println("Rotate the piece " + move.opRotate() + " times.");
+        }
+    }
+
+    public static class OpMove {
+        private int opX;
+        private int opRotate;
+
+        public OpMove(int opX, int opRotate) {
+            this.opX = opX;
+            this.opRotate = opRotate;
+        }
+
+        public int opX() {
+            return opX;
+        }
+
+        public int opRotate() {
+            return opRotate;
+        }
+    }
+
     @Override
     public void doLayout() {
         super.doLayout();
@@ -175,6 +262,8 @@ public class Game_Area extends JPanel {
         currentShape = shapes[gameScreen.random.nextInt(shapes.length)];
 //        currentShape = shapes[0];
         currentShape.reset();
+
+        pureGame.setCurrentShape(currentShape.getCoordinates());
         checkGameOver();
     }
 

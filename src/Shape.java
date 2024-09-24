@@ -83,7 +83,7 @@ public class Shape {
             normal = 50 - ((board.level - 1) * 3);
             delayTimeForMovement = normal;
         }
-        System.out.println(delayTimeForMovement);
+//        System.out.println(delayTimeForMovement);
         if (System.currentTimeMillis() - beginTime > delayTimeForMovement) {
             //Vertical Movement
             if (!(((int) y + 1 + coordinates.length) > Game_Area.BOARD_HEIGHT)) {

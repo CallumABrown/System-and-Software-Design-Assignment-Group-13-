@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="System-and-Software-Design-Assignment-Group-13:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/System_and_Software_Design_Assignment_Group_13_jar</output-path>
+    <root id="archive" name="TetrisJava.jar">
+      <element id="module-output" name="System-and-Software-Design-Assignment-Group-13" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/externalJar/gson-2.11.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
