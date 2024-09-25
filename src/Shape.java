@@ -52,6 +52,7 @@ public class Shape {
                     }
                 }
             }
+            aiRotations.aiBoardUpdate(x, y, coordinates);
             int linesCleared = checkLine();
             Game_Screen.playSound("resources/place.wav");
             updateScore(linesCleared);
@@ -97,7 +98,7 @@ public class Shape {
                     }
                 }
                 if (!collision) {
-                    y = y + 0.1;
+                    y = y + 0.1;//add 0.1 to make smoother
 //                    y++;
                 }
             } else {

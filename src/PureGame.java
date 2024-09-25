@@ -29,7 +29,31 @@ public class PureGame {
         // Logic to position the shape on the board if needed
     }
 
+    public int[][] getCells() {
+        // Return a deep copy of the cells to avoid external modifications
+        int[][] copy = new int[height][width];
+        for (int i = 0; i < height; i++) {
+            copy[i] = Arrays.copyOf(cells[i], width);
+        }
+        return copy;
+    }
 
+    public void setCells(int[][] newCells) {
+        this.cells = newCells;
+    }
+
+    public void updateCellsFromBoard(int[][] boardDimension) {
+        // Ensure that the boardDimension is the same size
+        if (boardDimension.length == height && boardDimension[0].length == width) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    cells[i][j] = boardDimension[i][j]; // Copy over the state
+                }
+            }
+        } else {
+            System.out.println("Error: Board dimensions do not match.");
+        }
+    }
 
     @Override
     public String toString() {

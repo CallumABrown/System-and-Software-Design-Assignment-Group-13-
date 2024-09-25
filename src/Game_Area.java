@@ -9,10 +9,15 @@ import java.io.*;
 import java.util.Random;
 import java.net.Socket;
 import com.google.gson.Gson;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.awt.AWTException;
+
 
 public class Game_Area extends JPanel {
     private PureGame pureGame;
     private High_Score_Menu highScoreMenu;
+
 
     private static int FPS = 200;
     private static int delay = 1000 / FPS;
@@ -22,6 +27,7 @@ public class Game_Area extends JPanel {
     public static final int BLOCK_SIZE = 30;
     private Timer looper;
     private Color[][] board;
+    public Shape currentShape;
 
 
 //    private Random random;
@@ -41,25 +47,26 @@ public class Game_Area extends JPanel {
     };
 
     private Shape[] shapes = new Shape[7];
-    private Shape currentShape;
     private Shape nextShape;
 
     private Game_Screen gameScreen;
 
     public Game_Area(Game_Screen gameScreen) {
+        aiRotations.aiBoard();
+//        aiRotations.drawBoard();
         this.gameScreen = gameScreen;
         setLayout(null);
         pureGame = new PureGame(BOARD_WIDTH, BOARD_HEIGHT);
 
-        JButton sendStateButton = new JButton("Send Game State");
-        sendStateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sendGameStateToServer(); // Method to send the game state
-            }
-        });
-
-        add(sendStateButton);
+//        JButton sendStateButton = new JButton("Send Game State");
+//        sendStateButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                 // Method to send the game state
+//            }
+//        });
+//
+//        add(sendStateButton);
 
         BOARD_WIDTH = Options_Menu.window_width;
         BOARD_HEIGHT = Options_Menu.window_height;
@@ -178,6 +185,11 @@ public class Game_Area extends JPanel {
 
         pureGame.setNextShape(new int[][]{{1, 1, 1, 1}}); // Example assignment
 
+        pureGame.updateCellsFromBoard(aiRotations.boardDimension);
+
+        //int[][] boardCopy = getBoardState(); // Use your existing method to get the current board state
+       // pureGame.setCells(boardCopy);
+
         // Send the game state to the server
         try (Socket socket = new Socket("localhost", 3000);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -205,22 +217,76 @@ public class Game_Area extends JPanel {
     }
 
 
-    private Color[][] getBoardState() {
-        // Return the current state of the board as a 2D array
-        return board; // Adjust as necessary based on your implementation
-    }
+
 
     private void applyMove(OpMove move) {
+
         // Implement logic to apply the optimal move to the current game state
-        if (move.opX() == 0) {
-            System.out.println("Place the piece at the left-most position.");
+        if (move.opX() == 5) {
+            System.out.println("Do nothing.");
         } else {
             System.out.println("Move the piece to X=" + move.opX());
+            int start = BOARD_WIDTH/2 - move.opX();
+            try {
+                if (move.opX() > 5) {
+                    try {
+                        Robot robot = new Robot();
+                        System.out.println(start);
+                        for (int i = 0; i < move.opX()-(BOARD_WIDTH/2); i++) {
+                            // Simulate pressing the UP key
+                            System.out.println("right");
+                            robot.keyPress(KeyEvent.VK_RIGHT);
+                            robot.keyRelease(KeyEvent.VK_RIGHT);
+                            // Optional: Add a small delay between key presses
+                            Thread.sleep(100); // Adjust delay as necessary
+                        }
+                    } catch (AWTException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if (move.opX < 5) {
+                    try {
+                        Robot robot = new Robot();
+                        for (int i = 0; i < (BOARD_WIDTH/2)-move.opX(); i++) {
+                            System.out.println("left");
+                            // Simulate pressing the UP key
+                            robot.keyPress(KeyEvent.VK_LEFT);
+                            robot.keyRelease(KeyEvent.VK_LEFT);
+                            // Optional: Add a small delay between key presses
+                            Thread.sleep(100); // Adjust delay as necessary
+                        }
+                    } catch (AWTException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Robot robot = new Robot();
+                for (int i = 0; i < move.opX; i++) {
+                    // Simulate pressing the UP key
+                    robot.keyPress(KeyEvent.VK_UP);
+                    robot.keyRelease(KeyEvent.VK_UP);
+                    // Optional: Add a small delay between key presses
+                    Thread.sleep(100); // Adjust delay as necessary
+                }
+            } catch (AWTException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         if (move.opRotate() == 0) {
             System.out.println("No rotation needed.");
         } else {
             System.out.println("Rotate the piece " + move.opRotate() + " times.");
+            try {
+                Robot robot = new Robot();
+                for (int i = 0; i < move.opRotate(); i++) {
+                    // Simulate pressing the UP key
+                    robot.keyPress(KeyEvent.VK_UP);
+                    robot.keyRelease(KeyEvent.VK_UP);
+                    // Optional: Add a small delay between key presses
+                    Thread.sleep(100); // Adjust delay as necessary
+                }
+            } catch (AWTException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -260,10 +326,14 @@ public class Game_Area extends JPanel {
 
     public void setCurrentShape() {
         currentShape = shapes[gameScreen.random.nextInt(shapes.length)];
+//        aiRotations.drawPiece(currentShape.getCoordinates());
 //        currentShape = shapes[0];
         currentShape.reset();
 
         pureGame.setCurrentShape(currentShape.getCoordinates());
+        if (Options_Menu.player1_type == "External") {
+            sendGameStateToServer();
+        }
         checkGameOver();
     }
 

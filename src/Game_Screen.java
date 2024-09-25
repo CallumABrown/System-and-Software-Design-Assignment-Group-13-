@@ -121,6 +121,7 @@ public class Game_Screen extends JFrame {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
                     board.getCurrentShape().rotateShape();
+//                    aiRotations.drawPiece(board.getCurrentShape().getCoordinates());
                     playSound("resources/rotate_and_move.wav");
                     break;
                 case KeyEvent.VK_DOWN:
