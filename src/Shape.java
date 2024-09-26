@@ -13,9 +13,9 @@ public class Shape {
     private int deltaX = 0;
     private boolean collision = false;
 
-    private int[][] coordinates;
+    public int[][] coordinates;
     private Game_Area board;
-    private Color color;
+    public Color color;
 
     int lines;
 

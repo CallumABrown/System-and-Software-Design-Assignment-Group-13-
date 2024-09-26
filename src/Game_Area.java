@@ -8,7 +8,9 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.util.Random;
 import java.net.Socket;
+
 import com.google.gson.Gson;
+
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.AWTException;
@@ -39,6 +41,7 @@ public class Game_Area extends JPanel {
     int score = 0;
     int rowsCompleted = 0;
     public boolean downPressed;
+    private int tetrominoIteration = 0;
 
 
     private int[][] shapeParameters = {
@@ -109,8 +112,8 @@ public class Game_Area extends JPanel {
                 {1, 1} // O Shape
         }, this, colors[6]);
 
-        currentShape = shapes[0];
-
+        currentShape = shapes[gameScreen.tetrominoGenerator[tetrominoIteration]];
+        nextShape = shapes[gameScreen.tetrominoGenerator[tetrominoIteration + 1]];
 
         looper = new Timer(delay, new ActionListener() {
             int n = 0;
@@ -188,7 +191,7 @@ public class Game_Area extends JPanel {
         pureGame.updateCellsFromBoard(aiRotations.boardDimension);
 
         //int[][] boardCopy = getBoardState(); // Use your existing method to get the current board state
-       // pureGame.setCells(boardCopy);
+        // pureGame.setCells(boardCopy);
 
         // Send the game state to the server
         try (Socket socket = new Socket("localhost", 3000);
@@ -217,8 +220,6 @@ public class Game_Area extends JPanel {
     }
 
 
-
-
     private void applyMove(OpMove move) {
 
         // Implement logic to apply the optimal move to the current game state
@@ -226,13 +227,13 @@ public class Game_Area extends JPanel {
             System.out.println("Do nothing.");
         } else {
             System.out.println("Move the piece to X=" + move.opX());
-            int start = BOARD_WIDTH/2 - move.opX();
+            int start = BOARD_WIDTH / 2 - move.opX();
             try {
                 if (move.opX() > 5) {
                     try {
                         Robot robot = new Robot();
                         System.out.println(start);
-                        for (int i = 0; i < move.opX()-(BOARD_WIDTH/2); i++) {
+                        for (int i = 0; i < move.opX() - (BOARD_WIDTH / 2); i++) {
                             // Simulate pressing the UP key
                             System.out.println("right");
                             robot.keyPress(KeyEvent.VK_RIGHT);
@@ -243,11 +244,10 @@ public class Game_Area extends JPanel {
                     } catch (AWTException | InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                else if (move.opX < 5) {
+                } else if (move.opX < 5) {
                     try {
                         Robot robot = new Robot();
-                        for (int i = 0; i < (BOARD_WIDTH/2)-move.opX(); i++) {
+                        for (int i = 0; i < (BOARD_WIDTH / 2) - move.opX(); i++) {
                             System.out.println("left");
                             // Simulate pressing the UP key
                             robot.keyPress(KeyEvent.VK_LEFT);
@@ -325,7 +325,10 @@ public class Game_Area extends JPanel {
     }
 
     public void setCurrentShape() {
-        currentShape = shapes[gameScreen.random.nextInt(shapes.length)];
+        tetrominoIteration++;
+        System.out.println(tetrominoIteration);
+        currentShape = shapes[gameScreen.tetrominoGenerator[tetrominoIteration]];
+        nextShape = shapes[gameScreen.tetrominoGenerator[tetrominoIteration + 1]];
 //        aiRotations.drawPiece(currentShape.getCoordinates());
 //        currentShape = shapes[0];
         currentShape.reset();
@@ -423,8 +426,23 @@ public class Game_Area extends JPanel {
         // Draw next window
         x -= 20;
         y += 200;
-        g.drawRect(x, y, 100, 100);
+        g.drawRect(x, y, 150, 200);
         g.drawString("NEXT", x + 20, y + 30);
+
+        x += 5;
+        y += 50;
+
+        //next shape render
+        // Draw the Shape
+        for (int row = 0; row < nextShape.coordinates.length; row++) {
+            for (int col = 0; col < nextShape.coordinates[0].length; col++) {
+                if (nextShape.coordinates[row][col] != 0) {
+                    g.setColor(nextShape.color);
+                    g.fillRect((x) + (col * Game_Area.BLOCK_SIZE), (y) + (row * Game_Area.BLOCK_SIZE), Game_Area.BLOCK_SIZE, Game_Area.BLOCK_SIZE);
+                }
+            }
+        }
+
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {

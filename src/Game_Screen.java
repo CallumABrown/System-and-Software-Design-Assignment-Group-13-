@@ -16,6 +16,7 @@ public class Game_Screen extends JFrame {
     public Clip music;
 
     public Random random = new Random();
+    public int[] tetrominoGenerator = new int[10000];
 
     public static void playSound(String soundFilePath) {
         try {
@@ -45,6 +46,10 @@ public class Game_Screen extends JFrame {
     }
 
     public Game_Screen() {
+        for (int i = 0; i < tetrominoGenerator.length; i++) {
+            int randomNumber = new Random().nextInt(7);
+            tetrominoGenerator[i] = randomNumber;
+        }
         setTitle("Tetris");
         HEIGHT = (32 * Options_Menu.window_height);
         WIDTH = (int) (31.5 * Options_Menu.window_width) + 200;
