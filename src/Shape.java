@@ -56,10 +56,12 @@ public class Shape {
             int linesCleared = checkLine();
             Game_Screen.playSound("resources/place.wav");
             updateScore(linesCleared);
+
             //Change Current Shape
             board.setCurrentShape();
             return;
         }
+
         // Check Horizontal Movement
         boolean moveX = true;
         if (!(x + deltaX + coordinates[0].length > Options_Menu.window_width) && !(x + deltaX < 0)) {
