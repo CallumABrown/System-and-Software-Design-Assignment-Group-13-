@@ -30,7 +30,7 @@ public class Game_Area extends JPanel {
     private Timer looper;
     private Color[][] board;
     public static Shape currentShape;
-
+    private aiBot aiBot;
 
 //    private Random random;
 

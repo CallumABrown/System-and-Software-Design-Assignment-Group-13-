@@ -16,7 +16,8 @@ public class Shape {
     public int[][] coordinates;
     private Game_Area board;
     public Color color;
-
+    private aiBot aiBot = new aiBot();
+    private boolean drawnOnce = false;
     int lines;
 
     public Shape(int[][] coordinates, Game_Area board, Color color) {
@@ -43,7 +44,15 @@ public class Shape {
     }
 
     public void update() {
+        if (!drawnOnce && Options_Menu.player1_type == "AI") {
+            aiRotations.setCurrentShape(coordinates);
+            aiBot.findBestPlacement(aiRotations.getCurrentShape());
+            drawnOnce = true;
+        }
         if (collision) {
+            //aiRotations.setCurrentShape(coordinates);
+
+            System.out.print("Location array: ");
             //Fill the color for board
             for (int row = 0; row < coordinates.length; row++) {
                 for (int col = 0; col < coordinates[0].length; col++) {
@@ -59,6 +68,7 @@ public class Shape {
 
             //Change Current Shape
             board.setCurrentShape();
+            drawnOnce = false;
             return;
         }
 

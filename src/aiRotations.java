@@ -3,6 +3,7 @@ public class aiRotations {
     public static int[][] boardDimension;
     public static int row = Options_Menu.window_width;
     public static int col = Options_Menu.window_height;
+    private static int[][] currentShape;
 
     //keep this to draw board/////////////////////
     public static void aiBoard()
@@ -21,32 +22,32 @@ public class aiRotations {
     }
 ////////////////////////////////////
 
-//    public static void drawBoard() {
-//        // Ensure the boardDimension array is populated
-//        if (boardDimension == null) {
-//            System.out.println("Board is not initialized.");
-//            return;
-//        }
-//
-//        // Print the boardDimension array
-//        for (int i = 0; i < col; i++) {
-//            for (int j = 0; j < row; j++) {
-//                System.out.print(boardDimension[i][j] + " ");  // Print the value in the matrix
-//            }
-//            System.out.println();
-//        }
-//    }
+    public static void drawBoard() {
+        // Ensure the boardDimension array is populated
+        if (boardDimension == null) {
+            System.out.println("Board is not initialized.");
+            return;
+        }
 
-//    public static void drawPiece(int[][] currentShape)
-//    {
-//        for (int[] row : currentShape) {
-//            for (int val : row) {
-//                System.out.print((val == 1 ? "*" : " ") + " ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
-//    }
+        // Print the boardDimension array
+        for (int i = 0; i < col; i++) {
+            for (int j = 0; j < row; j++) {
+                System.out.print(boardDimension[i][j] + " ");  // Print the value in the matrix
+            }
+            System.out.println();
+        }
+    }
+
+    public static void drawPiece(int[][] currentShape)
+    {
+        for (int[] row : currentShape) {
+            for (int val : row) {
+                System.out.print((val == 1 ? "*" : " ") + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
     public static void aiBoardUpdate(int x, double y, int[][] shape) {
         // Ensure the boardDimension array is populated
         if (boardDimension == null) {
@@ -72,10 +73,8 @@ public class aiRotations {
 
     // After placing the shape, check for full lines and clear them
         checkAiBoardLines();
+        drawBoard(); // Draw the board after update
 
-//        drawBoard(); // Draw the board after update
-
-        //pureGame.getCells(board dimension)
     }
 
     private static void checkAiBoardLines() {
@@ -115,25 +114,17 @@ public class aiRotations {
             }
         }
     }
+    // Method to set the current shape
+    public static void setCurrentShape(int[][] shape) {
+        currentShape = shape;
+        System.out.println("done ");
+    }
 
+    // Method to get the current shape
+    public static int[][] getCurrentShape() {
+        System.out.println("done ");
+        return currentShape;
+    }
 }
 
-//next task
-// when row is cleared update matrix
-
-
-
-//// create matrix
-//// get current block that is dropping
-//// choose location
-//// update matrix with blocks new position
-//// and different symbol
-
-
-//// --check function
-//// get bottom size of piece dropping
-//// scan read through each available position at the lowest point
-//// if current base of shape doesn't fill remaining gap
-//// rotate shape and scan checking if line gets completed
-//// if piece doesnt fill gap move to second row and place piece
 
