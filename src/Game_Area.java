@@ -236,7 +236,7 @@ public class Game_Area extends JPanel {
 
 
     private static void applyMove(OpMove move) throws InterruptedException {
-        Thread.sleep(200);
+        Thread.sleep(1);
         // Implement logic to apply the optimal move to the current game state
         if (move.opX() == 5) {
             System.out.println("Do nothing.");
@@ -254,7 +254,7 @@ public class Game_Area extends JPanel {
                             robot.keyPress(KeyEvent.VK_RIGHT);
                             robot.keyRelease(KeyEvent.VK_RIGHT);
                             // Optional: Add a small delay between key presses
-                            Thread.sleep(100); // Adjust delay as necessary
+                            Thread.sleep(1); // Adjust delay as necessary
                         }
                     } catch (AWTException | InterruptedException e) {
                         e.printStackTrace();
@@ -268,7 +268,7 @@ public class Game_Area extends JPanel {
                             robot.keyPress(KeyEvent.VK_LEFT);
                             robot.keyRelease(KeyEvent.VK_LEFT);
                             // Optional: Add a small delay between key presses
-                            Thread.sleep(100); // Adjust delay as necessary
+                            Thread.sleep(1); // Adjust delay as necessary
                         }
                     } catch (AWTException | InterruptedException e) {
                         e.printStackTrace();
@@ -280,7 +280,7 @@ public class Game_Area extends JPanel {
                     robot.keyPress(KeyEvent.VK_UP);
                     robot.keyRelease(KeyEvent.VK_UP);
                     // Optional: Add a small delay between key presses
-                    Thread.sleep(100); // Adjust delay as necessary
+                    Thread.sleep(1); // Adjust delay as necessary
                 }
             } catch (AWTException | InterruptedException e) {
                 e.printStackTrace();
@@ -351,9 +351,9 @@ public class Game_Area extends JPanel {
         pureGame.setCurrentShape(currentShape.getCoordinates());
         pureGame.setNextShape((nextShape.getCoordinates()));
         checkGameOver();
-        if (Options_Menu.player1_type.equals("External")) {
-            sendGameStateToServer();
-        }
+        //if (Options_Menu.player1_type.equals("External")) {
+          //  sendGameStateToServer();
+        //}
 
     }
 
