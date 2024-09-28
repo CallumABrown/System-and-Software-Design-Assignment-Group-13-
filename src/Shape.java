@@ -56,7 +56,7 @@ public class Shape {
         if (collision) {
             //aiRotations.setCurrentShape(coordinates);
 
-            System.out.print("Location array: ");
+            //System.out.print("Location array: ");
             //Fill the color for board
             for (int row = 0; row < coordinates.length; row++) {
                 for (int col = 0; col < coordinates[0].length; col++) {

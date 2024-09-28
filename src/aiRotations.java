@@ -73,7 +73,7 @@ public class aiRotations {
 
     // After placing the shape, check for full lines and clear them
         checkAiBoardLines();
-        drawBoard(); // Draw the board after update
+        //drawBoard(); // Draw the board after update
 
     }
 
@@ -117,12 +117,12 @@ public class aiRotations {
     // Method to set the current shape
     public static void setCurrentShape(int[][] shape) {
         currentShape = shape;
-        System.out.println("done ");
+        //System.out.println("done ");
     }
 
     // Method to get the current shape
     public static int[][] getCurrentShape() {
-        System.out.println("done ");
+        //System.out.println("done ");
         return currentShape;
     }
 }

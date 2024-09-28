@@ -3,11 +3,11 @@ import java.awt.event.KeyEvent;
 
 public class aiBot {
 
-    int scoreAdjWalls = 1000;    // Score for adjacent walls and the bottom
-    int scoreHeight = 100000;        // Score for each additional height
-    int scoreBubble = -5000;        // Score for each empty space covered
-    int scoreRowClear = 1000000;    // Score for completing a row
-    int scoreTetris = 10000000;    // Score for making a tetris
+    int scoreAdjWalls = 500;    // Score for adjacent walls and the bottom
+    int scoreHeight = 10000;        // Score for each additional height
+    int scoreBubble = -1500;        // Score for each empty space covered
+    int scoreRowClear = 10000000;    // Score for completing a row
+    int scoreTetris = 1000000000;    // Score for making a tetris
 
     public static int col = Options_Menu.window_width;
     public static int row = Options_Menu.window_height;
@@ -47,7 +47,7 @@ public class aiBot {
             currentShape = rotateShape(currentShape);
         }
 
-        System.out.println("Best placement: Row = " + bestRow + ", Col = " + bestCol + ", Rotation = " + bestRotationNumber * 90 + " degrees");
+        //System.out.println("Best placement: Row = " + bestRow + ", Col = " + bestCol + ", Rotation = " + bestRotationNumber * 90 + " degrees");
         int[] location = {bestRow,bestCol,bestRotationNumber};
         placeShapeOnBoard(location);
         return new int[]{bestRow, bestCol,bestRotationNumber};  // Return the best row and column
@@ -96,11 +96,11 @@ public class aiBot {
     }
 
     public void placeShapeOnBoard(int[] location) {
-        System.out.print("Location array: ");
-        for (int i = 0; i < location.length; i++) {
-            System.out.print(location[i] + " ");
-        }
-        System.out.println();
+        //System.out.print("Location array: ");
+        //for (int i = 0; i < location.length; i++) {
+          //  System.out.print(location[i] + " ");
+        //}
+        //System.out.println();
 
         try {
             Robot robot = new Robot();
@@ -111,7 +111,7 @@ public class aiBot {
             if (targetColumn > currentColumn) {
                 int stepsRight = targetColumn - currentColumn;
                 for (int i = 0; i < stepsRight; i++) {
-                    System.out.println("Moving right");
+                    //System.out.println("Moving right");
                     robot.keyPress(KeyEvent.VK_RIGHT);
                     robot.keyRelease(KeyEvent.VK_RIGHT);
                     Thread.sleep(100); // Adjust for appropriate delay
@@ -121,7 +121,7 @@ public class aiBot {
             else if (targetColumn < currentColumn) {
                 int stepsLeft = currentColumn - targetColumn;
                 for (int i = 0; i < stepsLeft; i++) {
-                    System.out.println("Moving left" + stepsLeft);
+                    //System.out.println("Moving left" + stepsLeft);
                     robot.keyPress(KeyEvent.VK_LEFT);
                     robot.keyRelease(KeyEvent.VK_LEFT);
                     Thread.sleep(100); // Adjust for appropriate delay
@@ -132,7 +132,7 @@ public class aiBot {
 
             // Handle rotation if necessary
             for (int i = 0; i < location[2]; i++) {
-                System.out.println("Rotating");
+                //System.out.println("Rotating");
                 robot.keyPress(KeyEvent.VK_UP);
                 robot.keyRelease(KeyEvent.VK_UP);
                 Thread.sleep(100); // Adjust delay as necessary
@@ -149,7 +149,7 @@ public class aiBot {
 
         // Increase the reward for clearing lines
         int clearedLines = checkClearedLines();
-        System.out.println("Cleared lines: " + clearedLines);
+        //System.out.println("Cleared lines: " + clearedLines);
         if (clearedLines >= 4) {
             score += scoreTetris;  // Assuming this is a big reward
         } else if (clearedLines > 0) {
@@ -158,21 +158,21 @@ public class aiBot {
 
         // Adjust bubble penalty (lowering the penalty)
         int bubbleCount = checkBubbles(col, currentShape);
-        System.out.println("Bubbles count: " + bubbleCount);
+        //System.out.println("Bubbles count: " + bubbleCount);
         score += scoreBubble * bubbleCount;  // If scoreBubble is negative, this penalizes the score
 
         // Reduce the height penalty significantly (make this less harsh)
-        System.out.println("Row height penalty: " + scoreHeight * row);
+        //System.out.println("Row height penalty: " + scoreHeight * row);
         score += scoreHeight * row;  // Lower the impact of row height
 
         // Check adjacency to walls and bottom, and score it
         int adjWallBottomScore = checkAdjacentWallsAndBottom(currentShape, row, col);
         score += adjWallBottomScore;
 
-        System.out.println("Adjacent Walls Score: " + adjWallBottomScore);
+        //System.out.println("Adjacent Walls Score: " + adjWallBottomScore);
 
         // Final score output for debugging
-        System.out.println("Final score: " + score);
+        //System.out.println("Final score: " + score);
         return score;
     }
 
@@ -207,10 +207,10 @@ public class aiBot {
         }
         // The valid row is the last non-colliding position
         if (row == 0 || shapeCollision(shape, row - 1, col)) {
-            System.out.println("No valid placement for column: " + col);
+            //System.out.println("No valid placement for column: " + col);
             return -1;
         }
-        System.out.println("Shape dropped at row: " + (row - 1) + " for column: " + col);
+        //System.out.println("Shape dropped at row: " + (row - 1) + " for column: " + col);
         return row - 1;
     }
 
@@ -272,7 +272,7 @@ public class aiBot {
             if (col == 0 || col + shape[0].length == boardDimension[0].length) {
                 // Shape is adjacent to the left or right wall
                 score += scoreAdjWalls;  // Award points for being adjacent to the wall
-                System.out.println("Adjacent to wall: " + (col == 0 ? "left" : "right"));
+                //System.out.println("Adjacent to wall: " + (col == 0 ? "left" : "right"));
             }
         }
 
@@ -281,7 +281,7 @@ public class aiBot {
             if (row + shape.length == boardDimension.length || (row + shape.length < boardDimension.length && boardDimension[row + shape.length][col + c] != 0)) {
                 // Shape is adjacent to the bottom or another block below
                 score += scoreAdjWalls;  // Award points for being adjacent to the bottom
-                System.out.println("Adjacent to the bottom or another block below");
+                //System.out.println("Adjacent to the bottom or another block below");
             }
         }
 
