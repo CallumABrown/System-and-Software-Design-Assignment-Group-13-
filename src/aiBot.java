@@ -199,7 +199,7 @@ public class aiBot {
     }
 
 
-    private int shapeDrop(int[][] shape, int col) {
+    int shapeDrop(int[][] shape, int col) {
         int row = 0;
         while (row + shape.length <= aiRotations.getBoardDimension().length &&
                 !shapeCollision(shape, row, col)) {
@@ -217,7 +217,7 @@ public class aiBot {
 
 
     // Moved checkClearedLines to aiBot
-    private int checkClearedLines() {
+    int checkClearedLines() {
         int rowsCleared = 0;
         int[][] boardDimension = aiRotations.getBoardDimension();
 
@@ -241,7 +241,7 @@ public class aiBot {
         return rowsCleared;
     }
 
-    private int checkBubbles(int startCol, int[][] currentShape) {
+    int checkBubbles(int startCol, int[][] currentShape) {
         int bubbles = 0;
 
         int shapeWidth = currentShape[0].length;

@@ -156,6 +156,8 @@ public class Game_Screen extends JFrame {
                         music.start();
                         Options_Menu.music = true;
                     }
+                case KeyEvent.VK_S:
+                    Options_Menu.sound_effects = !Options_Menu.sound_effects;
             }
         }
 

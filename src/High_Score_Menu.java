@@ -11,9 +11,9 @@ import java.util.List;
 import java.io.*;
 
 public class High_Score_Menu extends JFrame {
+    public static final short HIGH_SCORES_COUNT = 10;
     private static final String HIGH_SCORE_FILE_PATH = "data/highscores.json";
-    private static final int HIGH_SCORES_COUNT = 10;
-    private List<HighScoreClass> highScoresLeaderboard;
+    List<HighScoreClass> highScoresLeaderboard;
 
     public High_Score_Menu() {
         setTitle("High Scores");
@@ -86,7 +86,7 @@ public class High_Score_Menu extends JFrame {
         });
     }
 
-    private void loadHighScores() {
+    void loadHighScores() {
         highScoresLeaderboard = new ArrayList<>();
         File highScoreFile = new File(HIGH_SCORE_FILE_PATH);
 
@@ -112,7 +112,7 @@ public class High_Score_Menu extends JFrame {
         }
     }
 
-    private void createDefaultHighScores() {
+    void createDefaultHighScores() {
         highScoresLeaderboard = new ArrayList<>();
         for (int i = 0; i < HIGH_SCORES_COUNT; i++) {
             highScoresLeaderboard.add(new HighScoreClass("No Record", 0));
@@ -146,7 +146,7 @@ public class High_Score_Menu extends JFrame {
         displayHighScores((Panel)getContentPane().getComponent(0), new GridBagConstraints()); // Refresh display
     }
 
-    private void resetHighScores() {
+    void resetHighScores() {
         createDefaultHighScores(); // Create a new default file
         loadHighScores(); // Reload the scores from the file
     }

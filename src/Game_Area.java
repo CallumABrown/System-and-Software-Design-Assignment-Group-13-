@@ -61,17 +61,6 @@ public class Game_Area extends JPanel {
         setLayout(null);
         pureGame = new PureGame(BOARD_WIDTH, BOARD_HEIGHT);
 
-
-//        JButton sendStateButton = new JButton("Send Game State");
-//        sendStateButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                 // Method to send the game state
-//            }
-//        });
-//
-//        add(sendStateButton);
-
         BOARD_WIDTH = Options_Menu.window_width;
         BOARD_HEIGHT = Options_Menu.window_height;
 
@@ -459,6 +448,27 @@ public class Game_Area extends JPanel {
                 }
             }
         }
+
+        y += 120;
+        if (Options_Menu.music) {
+            g.setColor(Color.GREEN); // Color when music is ON
+            g.drawString("Music: On", x, y);
+        } else {
+            g.setColor(Color.RED); // Color when music is OFF
+            g.drawString("Music: Off", x, y);
+        }
+
+        y += 20; // Move Y down for the next string
+
+// Draw Sound Effects Status
+        if (Options_Menu.sound_effects) {
+            g.setColor(Color.GREEN); // Color when sound effects are ON
+            g.drawString("Sound Effects: On", x, y);
+        } else {
+            g.setColor(Color.RED); // Color when sound effects are OFF
+            g.drawString("Sound Effects: Off", x, y);
+        }
+
 
 
         for (int row = 0; row < board.length; row++) {
