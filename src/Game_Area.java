@@ -178,9 +178,7 @@ public class Game_Area extends JPanel {
         add(returnButton);
 
         setFocusable(true);
-        if (Options_Menu.player1_type.equals("External")) {
-            sendGameStateToServer();
-        }
+
     }
 
     public static void sendGameStateToServer() {
