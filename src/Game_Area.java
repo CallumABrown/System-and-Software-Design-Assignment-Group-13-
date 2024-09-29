@@ -432,6 +432,7 @@ public class Game_Area extends JPanel {
         g.drawRect(x, y, 140, 160);
         x += 20;
         y += 30;
+        y += 30;
         g.drawString("Player Type: " + playerType, x, y);
         y += 30;
         g.drawString("Initial Level: " + Options_Menu.game_level, x, y);

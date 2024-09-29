@@ -49,8 +49,13 @@ public class Shape {
             aiBot.findBestPlacement(aiRotations.getCurrentShape());
             drawnOnce = true;
         }
+        if (!drawnOnce && Options_Menu.player2_type == "AI") {
+            aiRotations.setCurrentShape(coordinates);
+            aiBot.findBestPlacement(aiRotations.getCurrentShape());
+            drawnOnce = true;
+        }
         if (!drawnOnce && Options_Menu.player1_type == "External") {
-                Game_Area.sendGameStateToServer();
+                //Game_Area.sendGameStateToServer();
             drawnOnce = true;
         }
         if (collision) {

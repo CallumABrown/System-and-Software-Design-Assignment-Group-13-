@@ -101,45 +101,91 @@ public class aiBot {
           //  System.out.print(location[i] + " ");
         //}
         //System.out.println();
+        if (Options_Menu.player1_type == "AI") {
+            try {
+                System.out.println("im here");
+                Robot robot = new Robot();
+                int targetColumn = location[1]; // Target column where the piece should be placed
+                int currentColumn = col / 2 - 1;
 
-        try {
-            Robot robot = new Robot();
-            int targetColumn = location[1]; // Target column where the piece should be placed
-            int currentColumn = col/2-1;
 
-            // If the shape needs to move to the right
-            if (targetColumn > currentColumn) {
-                int stepsRight = targetColumn - currentColumn;
-                for (int i = 0; i < stepsRight; i++) {
-                    //System.out.println("Moving right");
-                    robot.keyPress(KeyEvent.VK_RIGHT);
-                    robot.keyRelease(KeyEvent.VK_RIGHT);
-                    Thread.sleep(1); // Adjust for appropriate delay
+                // Handle rotation if necessary
+                for (int i = 0; i < location[2]; i++) {
+                    //System.out.println("Rotating");
+                    robot.keyPress(KeyEvent.VK_UP);
+                    robot.keyRelease(KeyEvent.VK_UP);
+                    Thread.sleep(1); // Adjust delay as necessary
                 }
-            }
-            // If the shape needs to move to the left (including moving to column 0)
-            else if (targetColumn < currentColumn) {
-                int stepsLeft = currentColumn - targetColumn;
-                for (int i = 0; i < stepsLeft; i++) {
-                    //System.out.println("Moving left" + stepsLeft);
-                    robot.keyPress(KeyEvent.VK_LEFT);
-                    robot.keyRelease(KeyEvent.VK_LEFT);
-                    Thread.sleep(1); // Adjust for appropriate delay
+
+                // If the shape needs to move to the right
+                if (targetColumn > currentColumn) {
+                    int stepsRight = targetColumn - currentColumn;
+                    for (int i = 0; i < stepsRight; i++) {
+                        //System.out.println("Moving right");
+                        robot.keyPress(KeyEvent.VK_RIGHT);
+                        robot.keyRelease(KeyEvent.VK_RIGHT);
+                        Thread.sleep(1); // Adjust for appropriate delay
+                    }
                 }
+                // If the shape needs to move to the left (including moving to column 0)
+                else if (targetColumn < currentColumn) {
+                    int stepsLeft = currentColumn - targetColumn;
+                    for (int i = 0; i < stepsLeft; i++) {
+                        //System.out.println("Moving left" + stepsLeft);
+                        robot.keyPress(KeyEvent.VK_LEFT);
+                        robot.keyRelease(KeyEvent.VK_LEFT);
+                        Thread.sleep(1); // Adjust for appropriate delay
+                    }
+                }
+
+                // If targetColumn is 0, no further movement needed, piece stays in place
+
+            } catch (AWTException | InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+        if (Options_Menu.player2_type == "AI") {
+            System.out.println("im here");
+            try {
+                Robot robot = new Robot();
+                int targetColumn = location[1]; // Target column where the piece should be placed
+                int currentColumn = col / 2 - 1;
 
-            // If targetColumn is 0, no further movement needed, piece stays in place
 
-            // Handle rotation if necessary
-            for (int i = 0; i < location[2]; i++) {
-                //System.out.println("Rotating");
-                robot.keyPress(KeyEvent.VK_UP);
-                robot.keyRelease(KeyEvent.VK_UP);
-                Thread.sleep(1); // Adjust delay as necessary
+                // Handle rotation if necessary
+                for (int i = 0; i < location[2]; i++) {
+                    //System.out.println("Rotating");
+                    robot.keyPress(KeyEvent.VK_W);
+                    robot.keyRelease(KeyEvent.VK_W);
+                    Thread.sleep(1); // Adjust delay as necessary
+                }
+
+                // If the shape needs to move to the right
+                if (targetColumn > currentColumn) {
+                    int stepsRight = targetColumn - currentColumn;
+                    for (int i = 0; i < stepsRight; i++) {
+                        //System.out.println("Moving right");
+                        robot.keyPress(KeyEvent.VK_A);
+                        robot.keyRelease(KeyEvent.VK_A);
+                        Thread.sleep(1); // Adjust for appropriate delay
+                    }
+                }
+                // If the shape needs to move to the left (including moving to column 0)
+                else if (targetColumn < currentColumn) {
+                    int stepsLeft = currentColumn - targetColumn;
+                    for (int i = 0; i < stepsLeft; i++) {
+                        //System.out.println("Moving left" + stepsLeft);
+                        robot.keyPress(KeyEvent.VK_D);
+                        robot.keyRelease(KeyEvent.VK_D);
+                        Thread.sleep(1); // Adjust for appropriate delay
+                    }
+                }
+
+                // If targetColumn is 0, no further movement needed, piece stays in place
+
+            } catch (AWTException | InterruptedException e) {
+                e.printStackTrace();
             }
-
-        } catch (AWTException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
