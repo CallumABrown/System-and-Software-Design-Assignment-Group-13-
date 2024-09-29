@@ -73,16 +73,16 @@ public class Game_Screen extends JFrame {
 
 
         if (Options_Menu.extend) {
-            board = new Game_Area(this);
+            board = new Game_Area(this, Options_Menu.player1_type);
             board.addKeyListener(new Player2KeyListener(board));
 
             gamePanel.add(board); // Add the first board
 
-            board2 = new Game_Area(this);
+            board2 = new Game_Area(this, Options_Menu.player2_type);
             board.addKeyListener(new Player1KeyListener(board2));// Add the second board side-by-side
             gamePanel.add(board2);
         } else {
-            board = new Game_Area(this);
+            board = new Game_Area(this, Options_Menu.player1_type);
             board.addKeyListener(new Player1KeyListener(board));
 
             gamePanel.add(board); // Add the first board
@@ -156,8 +156,10 @@ public class Game_Screen extends JFrame {
                         music.start();
                         Options_Menu.music = true;
                     }
-                case KeyEvent.VK_S:
-                    Options_Menu.sound_effects = !Options_Menu.sound_effects;
+                    break;
+//                case KeyEvent.VK_S:
+//                    Options_Menu.sound_effects = !Options_Menu.sound_effects;
+//                    break;
             }
         }
 

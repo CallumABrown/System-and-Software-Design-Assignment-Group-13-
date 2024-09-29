@@ -29,7 +29,7 @@ public class Game_Area extends JPanel {
     public static final int BLOCK_SIZE = 30;
     private Timer looper;
     private Color[][] board;
-    public static Shape currentShape;
+    public Shape currentShape;
     private aiBot aiBot;
 
 //    private Random random;
@@ -50,14 +50,16 @@ public class Game_Area extends JPanel {
     };
 
     private Shape[] shapes = new Shape[7];
-    private static Shape nextShape;
+    private Shape nextShape;
 
     private Game_Screen gameScreen;
+    private String playerType;
 
-    public Game_Area(Game_Screen gameScreen) {
+    public Game_Area(Game_Screen gameScreen, String playerType) {
         aiRotations.aiBoard();
 //        aiRotations.drawBoard();
         this.gameScreen = gameScreen;
+        this.playerType = playerType;
         setLayout(null);
         pureGame = new PureGame(BOARD_WIDTH, BOARD_HEIGHT);
 
@@ -175,9 +177,9 @@ public class Game_Area extends JPanel {
         // Ensure PureGame has a proper constructor and methods to retrieve state
 
         // Populate the PureGame object with current game state
-        pureGame.setCurrentShape(currentShape.getCoordinates()); // Assuming this returns the current shape
+//        pureGame.setCurrentShape(currentShape.coordinates); // Assuming this returns the current shape
 
-        pureGame.setNextShape(nextShape.getCoordinates()); // Example assignment
+//        pureGame.setNextShape(nextShape.coordinates); // Example assignment
 
         pureGame.updateCellsFromBoard(aiRotations.boardDimension);
 
@@ -341,7 +343,7 @@ public class Game_Area extends JPanel {
         pureGame.setNextShape((nextShape.getCoordinates()));
         checkGameOver();
         //if (Options_Menu.player1_type.equals("External")) {
-          //  sendGameStateToServer();
+        //  sendGameStateToServer();
         //}
 
     }
@@ -367,8 +369,6 @@ public class Game_Area extends JPanel {
         topFrame.dispose(); // Close the current game window
         new Main_Menu(); // Optionally start the main menu after disposing
     }
-
-
 
 
     private String enterPlayerName() {
@@ -429,10 +429,14 @@ public class Game_Area extends JPanel {
 
         int x = TEXT_LOCATION;
         int y = BOARD_HEIGHT;
-        g.drawRect(x, y, 140, 130);
+        g.drawRect(x, y, 140, 160);
         x += 20;
-        y += 40;
-        g.drawString("Level: " + level, x, y);
+        y += 30;
+        g.drawString("Player Type: " + playerType, x, y);
+        y += 30;
+        g.drawString("Initial Level: " + Options_Menu.game_level, x, y);
+        y += 30;
+        g.drawString("Current Level: " + level, x, y);
         y += 30;
         g.drawString("Score: " + score, x, y);
         y += 30;
@@ -441,7 +445,7 @@ public class Game_Area extends JPanel {
 
         // Draw next window
         x -= 20;
-        y += 200;
+        y += 150;
         g.drawRect(x, y, 150, 200);
         g.drawString("NEXT", x + 20, y + 30);
 
@@ -480,7 +484,6 @@ public class Game_Area extends JPanel {
         }
 
 
-
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 if (board[row][col] != null) {
@@ -496,161 +499,4 @@ public class Game_Area extends JPanel {
     public Color[][] getBoard() {
         return board;
     }
-
-    //    @Override
-//    public void keyTyped(KeyEvent e) {
-//
-//    }
-//    @Override
-//    public void keyPressed(KeyEvent e) {
-//        if (playerId == 1) {
-//            switch (e.getKeyCode()) {
-//                case KeyEvent.VK_UP:
-//                    currentShape.rotateShape();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_DOWN:
-//                    downPressed = true;
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_LEFT:
-//                    currentShape.moveLeft();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_RIGHT:
-//                    currentShape.moveRight();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_P:
-//                    if (state == GAME_STATE_PLAY) {
-//                        state = GAME_STATE_PAUSE;
-//                    } else if (state == GAME_STATE_PAUSE) {
-//                        state = GAME_STATE_PLAY;
-//                    }
-//                    break;
-//                case KeyEvent.VK_M:
-//                    if (Options_Menu.music) {
-//                        music.stop();
-//                        Options_Menu.music = false;
-//                    } else {
-//                        music.start();
-//                        Options_Menu.music = true;
-//                    }
-//            }
-//        }
-//
-//        // Player 2 controls with W A S D
-//        else {
-//            switch (e.getKeyCode()) {
-//                case KeyEvent.VK_W: // Rotate
-//                    currentShape.rotateShape();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_S: // Down
-//                    downPressed = true;
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_A: // Left
-//                    currentShape.moveLeft();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_D: // Right
-//                    currentShape.moveRight();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void keyReleased(KeyEvent e) {
-//        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//            downPressed = false;
-////            currentShape.speedDown();
-//        }
-//    }
-//    class Player1KeyListener implements KeyListener {
-//
-//        @Override
-//        public void keyPressed(KeyEvent e) {
-//            switch (e.getKeyCode()) {
-//                case KeyEvent.VK_UP:
-//                    currentShape.rotateShape();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_DOWN:
-//                    downPressed = true;
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_LEFT:
-//                    currentShape.moveLeft();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_RIGHT:
-//                    currentShape.moveRight();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_P:
-//                    if (state == GAME_STATE_PLAY) {
-//                        state = GAME_STATE_PAUSE;
-//                    } else if (state == GAME_STATE_PAUSE) {
-//                        state = GAME_STATE_PLAY;
-//                    }
-//                    break;
-//                case KeyEvent.VK_M:
-//                    if (Options_Menu.music) {
-//                        music.stop();
-//                        Options_Menu.music = false;
-//                    } else {
-//                        music.start();
-//                        Options_Menu.music = true;
-//                    }
-//            }
-//        }
-//
-//        @Override
-//        public void keyReleased(KeyEvent e) {
-//            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//                downPressed = false;
-//                //currentShape.speedDown();
-//            }
-//        }
-//
-//        @Override
-//        public void keyTyped(KeyEvent e) {
-//        }
-//    }
-//
-//    class Player2KeyListener implements KeyListener {
-//        @Override
-//        public void keyTyped(KeyEvent e) {
-//
-//        }
-//
-//        @Override
-//        public void keyPressed(KeyEvent e) {
-//            switch (e.getKeyCode()) {
-//                case KeyEvent.VK_W: // Rotate
-//                    currentShape.rotateShape();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_S: // Down
-//                    downPressed = true;
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_A: // Left
-//                    currentShape.moveLeft();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//                case KeyEvent.VK_D: // Right
-//                    currentShape.moveRight();
-//                    playSound("resources/rotate_and_move.wav");
-//                    break;
-//            }
-//        }
-//
-//        @Override
-//        public void keyReleased(KeyEvent e) {
-//        }
-//    }
 }

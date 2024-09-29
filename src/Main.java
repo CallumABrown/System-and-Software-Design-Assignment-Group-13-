@@ -8,7 +8,7 @@ public class Main {
         Options_Menu.music = false;
         Options_Menu.sound_effects = false;
         Options_Menu.extend = false;
-        Options_Menu.player1_type = "AI";
+        Options_Menu.player1_type = "Human";
         Options_Menu.player2_type = "Human";
         Options_Menu.game_level = 1;
         new Main_Menu();
