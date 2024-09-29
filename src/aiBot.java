@@ -114,7 +114,7 @@ public class aiBot {
                     //System.out.println("Moving right");
                     robot.keyPress(KeyEvent.VK_RIGHT);
                     robot.keyRelease(KeyEvent.VK_RIGHT);
-                    Thread.sleep(100); // Adjust for appropriate delay
+                    Thread.sleep(1); // Adjust for appropriate delay
                 }
             }
             // If the shape needs to move to the left (including moving to column 0)
@@ -124,7 +124,7 @@ public class aiBot {
                     //System.out.println("Moving left" + stepsLeft);
                     robot.keyPress(KeyEvent.VK_LEFT);
                     robot.keyRelease(KeyEvent.VK_LEFT);
-                    Thread.sleep(100); // Adjust for appropriate delay
+                    Thread.sleep(1); // Adjust for appropriate delay
                 }
             }
 
@@ -135,7 +135,7 @@ public class aiBot {
                 //System.out.println("Rotating");
                 robot.keyPress(KeyEvent.VK_UP);
                 robot.keyRelease(KeyEvent.VK_UP);
-                Thread.sleep(100); // Adjust delay as necessary
+                Thread.sleep(1); // Adjust delay as necessary
             }
 
         } catch (AWTException | InterruptedException e) {
