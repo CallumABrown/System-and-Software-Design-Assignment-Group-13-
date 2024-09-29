@@ -352,13 +352,23 @@ public class Game_Area extends JPanel {
 
     private void submitScore(int score) {
         String playerName = enterPlayerName(); // Get player's name
-        High_Score_Menu highScoreMenu = new High_Score_Menu(); // Create new instance here
+        High_Score_Menu highScoreMenu = High_Score_Menu.getInstance(); // Get singleton instance
         highScoreMenu.addHighScore(playerName, score); // Use entered name for the high score
 
-        // After saving the score, return to the main menu
+        // Instead of closing the game window immediately, you could open the high score menu
+        // If you still want to close the game window after some interaction,
+        // consider managing the timing or user interaction better.
+
+        // Optionally add a dialog or just return to main menu after high score interaction
+        JOptionPane.showMessageDialog(this, "Your score has been submitted!", "Score Submitted", JOptionPane.INFORMATION_MESSAGE);
+
+        // After confirming, return to the main menu or close the game
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.dispose(); // Close the current game window
+        new Main_Menu(); // Optionally start the main menu after disposing
     }
+
+
 
 
     private String enterPlayerName() {

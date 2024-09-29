@@ -13,9 +13,11 @@ import java.io.*;
 public class High_Score_Menu extends JFrame {
     public static final short HIGH_SCORES_COUNT = 10;
     private static final String HIGH_SCORE_FILE_PATH = "data/highscores.json";
-    List<HighScoreClass> highScoresLeaderboard;
+    private static High_Score_Menu instance; // Singleton instance
+    private List<HighScoreClass> highScoresLeaderboard;
 
-    public High_Score_Menu() {
+    // Private constructor
+    High_Score_Menu() {
         setTitle("High Scores");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         loadHighScores();
@@ -84,6 +86,14 @@ public class High_Score_Menu extends JFrame {
                 dispose();
             }
         });
+    }
+
+    // Public static method to get the singleton instance
+    public static High_Score_Menu getInstance() {
+        if (instance == null) {
+            instance = new High_Score_Menu();
+        }
+        return instance;
     }
 
     void loadHighScores() {
